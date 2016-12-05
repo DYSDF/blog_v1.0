@@ -1,0 +1,30 @@
+{{ brother }}
+{% load staticfiles %}
+{% if comment.reply.all %}
+    <li id="comment_{{ comment.id }}" class="comment_body comment_parent comment_odd comment_by_others">
+{% else %}
+    <li id="comment_{{ comment.id }}" class="comment_body comment_parent comment_odd">
+{% endif %}
+    <div class="comment_author">
+        <span><img class="avatar" src="{% static 'blog/images/default_avatar.jpg' %}" alt="Chenjian" height="32" width="32"></span>
+        <cite class="name">{{ comment.name }}</cite>
+    </div>
+    <div class="comment_meta">
+        <time class="time">{{ comment.date }}</time>
+    </div>
+    <div class="comment_content">
+        <p>{{ comment.content }}</p>
+    </div>
+    <div class="comment_reply">
+        <a href="javascript:;" onclick="return commentReply(this, {{ comment.id }});">回复</a>
+    </div>
+    {% if children %}
+        <ol class="comment_list">
+            <div class="comment_children">
+                {{ children }}
+            </div>
+        </ol>
+    {% endif %}
+</li>
+
+

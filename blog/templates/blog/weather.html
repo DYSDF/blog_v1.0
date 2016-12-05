@@ -1,0 +1,6 @@
+<img src="static/images/{{ weather.wtype|default:'w0' }}.png" alt=" ">
+<h1>Weather</h1>
+<p>城市：<span>{{weather.city|default:"N/A"}}</span>天气：<span>{{weather.forecast.0.type|default:"N/A"}}</span></p>
+<p>最高：<span>{{weather.forecast.0.high|slice:"6:"|default:"N/A"}}</span>最低：<span>{{weather.forecast.0.low|slice:"6:"|default:"N/A"}}</span></p>
+<p>风力：<span>{{weather.forecast.0.fengxiang|default:"N/A"}} {{weather.forecast.0.fengli|default:"N/A"}}</span></p>
+<p>提醒：<span>{{weather.ganmao|default:"暂时无法获取数据"}}</span></p>

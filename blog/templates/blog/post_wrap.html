@@ -1,0 +1,8 @@
+{% extends "blog/base.html" %}
+
+{% block post_wrap %}
+<div class="post_wrap">
+    {% include "blog/model/post_list.html" %}
+</div>
+{% include "blog/model/paginator.html" %}
+{% endblock %}

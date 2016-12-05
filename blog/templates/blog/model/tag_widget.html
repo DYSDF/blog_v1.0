@@ -1,0 +1,14 @@
+{#文章归档模块#}
+
+<section class="widget">
+    <h3 class="widget_title">文章标签</h3>
+    <div class="widget_content">
+        <ul class="widget_list">
+            {% for tag in tag_model %}
+                {% ifnotequal tag.count 0 %}
+                    <li><a href="/search/tag/{{ tag.id }}">{{ tag.tag }}({{ tag.count }})</a></li>
+                {% endifnotequal %}
+            {% endfor %}
+        </ul>
+    </div>
+</section>

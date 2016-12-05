@@ -1,0 +1,7 @@
+# directory
+.idea/
+.vscode/
+media/
+
+#file
+*.pyc

@@ -1,0 +1,14 @@
+{#文章归档模块#}
+
+<section class="widget">
+    <h3 class="widget_title">文章归档</h3>
+    <div class="widget_content">
+        <ul class="widget_list">
+            {% for cat in cat_model %}
+                {% ifnotequal cat.count 0 %}
+                    <li><a href="/search/cat/{{ cat.id }}">{{ cat.cat }}({{ cat.count }})</a></li>
+                {% endifnotequal %}
+            {% endfor %}
+        </ul>
+    </div>
+</section>

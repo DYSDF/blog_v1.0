@@ -1,0 +1,67 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>断崖FM</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'music/css/style.css' %}">
+    <script type="text/javascript" language="javascript" src="{% static 'jQuery/jquery.min.js' %}"></script>
+    <script type="text/javascript" language="javascript" src="{% static 'jQuery/jquery.cookie.js' %}"></script>
+    <script type="text/javascript" language="javascript" src="{% static 'music/js/js.js' %}"></script>
+</head>
+<body>
+<div id="container">
+    <div id="header">
+        <div id="title"><h2>断崖FM</h2>———— 做自己的音乐电台</div>
+    </div>
+    <div id="content">
+        <div id="blur_img"></div>
+        <div id="content_mask"></div>
+        <div id="control">
+            <span class="control_btn"><a id="control_notlike" href="javascript: void(0);"><span></span></a></span>
+            <span class="control_btn"><a id="control_prev" href="javascript: void(0);"><span></span></a></span>
+            <span class="control_playbtn"><a id="control_play" href="javascript: void(0);"><span></span></a>
+                <div id="control_ablum" class="rotate_stop"></div>
+            </span>
+            <span class="control_btn"><a id="control_next" href="javascript: void(0);"><span></span></a></span>
+            <span class="control_btn"><a id="control_vol" href="javascript: void(0);" data-vol="100"><span></span></a></span>
+        </div>
+        <div id="songPanel">
+            <div id="songContainer">
+                <div id="playlist">
+                    <ol>
+                    </ol>
+                </div>
+                <div id="songlist">
+                    <ol>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <div id="songlrc">
+            <ul>
+                <li>暂无歌词</li>
+            </ul>
+        </div>
+        <div id="songinfo">
+            <div id="music_name">《暂无歌曲》</div>
+            <div class="music_info">
+                <div id="music_ablum">专辑：<span>暂无专辑</span></div>
+                <div id="music_art">歌手：<span>暂无歌手</span></div>
+            </div>
+        </div>
+        <div id="songdur">
+            <div id="durprogress">
+                <div class="bg">
+                    <div class="progress"></div>
+                </div>
+            </div>
+            <div id="durtime"><span id="durCurTime">--:--</span> / <span id="durTolTime">--:--</span></div>
+        </div>
+        <a href="javascript: void(0);" id="listopen"><span></span></a>
+    </div>
+</div>
+</body>
+</html>

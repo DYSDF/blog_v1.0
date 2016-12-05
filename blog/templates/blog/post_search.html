@@ -1,0 +1,24 @@
+{% extends "blog/base.html" %}
+
+{% block post_wrap %}
+    <h3 class="archive_title">
+        <i class="icon icon-terminal"></i>
+        {% ifequal type "cat" %}
+            分类 {{ show_name }} 下的文章
+        {% else %}
+            {% ifequal type "tag" %}
+                标签 {{ show_name }} 下的文章
+            {% else %}
+                {% ifequal type "author" %}
+                    作者 {{ show_name }} 发布的文章
+                {% else %}
+                    包含关键字 {{ show_name }} 的文章
+                {% endifequal %}
+            {% endifequal %}
+        {% endifequal %}
+    </h3>
+    <div class="post_wrap">
+        {% include "blog/model/post_list.html" %}
+    </div>
+    {% include "blog/model/paginator.html" %}
+{% endblock %}

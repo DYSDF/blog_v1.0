@@ -1,0 +1,105 @@
+{% extends "blog/base.html" %}
+
+{% load staticfiles %}
+
+{% block siteTitle %}
+    <title>{{ result.title }}</title>
+{% endblock %}
+
+{% block styleSheet %}
+    {#    <link type="text/css" rel="stylesheet" href="{% static 'highlighter/styles/shCoreDefault.css' %}"/>#}
+    {#    <link rel="stylesheet" href="{% static 'ckeditor/plugins/codesnippet/lib/highlight/styles/default.css' %}">#}
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="{% static 'blog/js/post_single.js' %}"></script>
+{% endblock %}
+
+{% block post_single %}
+    <div class="post_single">
+        <div class="breadcrumb">
+            <i class="icon icon-home"></i>
+            <a href="/">首页</a> &gt;
+            <a href="/search/cat/{{ result.cat.id }}">{{ result.cat }}</a> &gt;
+            {{ result.title }}
+        </div>
+        <div class="post_title">
+            <h2><a href="/article/{{ result.create_time | date:"Y-m-d" }}/{{ result.pk }}">{{ result.title }}</a></h2>
+            <ul class="post_meta">
+                <li>
+                    <i class="icon icon-user"></i>
+                    <a href="/search/author/{{ result.author.id }}">{{ result.author }}</a>
+                </li>
+                <li>
+                    <i class="icon icon-calendar"></i>
+                    <span>{{ result.create_time | date:"Y-m-d" }}</span>
+                </li>
+                <li>
+                    <i class="icon icon-bookmark"></i>
+                    <a href="/search/cat/{{ result.cat.id }}">{{ result.cat }}</a>
+                </li>
+                <li>
+                    <i class="icon icon-tags"></i>
+                    {% for tag in result.tag.all %}
+                        <a href="/search/tag/{{ tag.id }}">{{ tag }}</a>{% if not forloop.last %}、{% endif %}
+                    {% endfor %}
+                </li>
+            </ul>
+        </div>
+        <div class="post_content">
+            {{ result.content | safe }}
+        </div>
+        <div class="post_near">
+            <div class="prev">
+                <span>上一篇</span>
+                {% if prev %}
+                    <a href="/article/{{ prev.create_time | date:"Y-m-d" }}/{{ prev.pk }}"
+                       title="{{ prev.title }}">{{ prev.title }}</a>
+                {% else %}
+                    没有了
+                {% endif %}
+            </div>
+            <div class="next">
+                {% if next %}
+                    <a href="/article/{{ next.create_time | date:"Y-m-d" }}/{{ next.pk }}"
+                       title="{{ next.title }}">{{ next.title }}</a>
+                {% else %}
+                    没有了
+                {% endif %}
+                <span>下一篇</span>
+            </div>
+        </div>
+        {% if perms.blog.change_blogpost %}
+            <div class="post_tool">
+                <a href="/admin/blog/content/{{ result.id }}/change/" target="_blank"><i class="icon icon-edit"></i></a>
+            </div>
+        {% endif %}
+    </div>
+    <div id="comments">
+        <div class="comment_sign">已有 {{ result.comments.all | length }} 条评论</div>
+        {% if comments %}
+            <ol class="comment_list">
+                {{ comments }}
+            </ol>
+        {% endif %}
+
+        <div id="respond_post">
+            <div class="comment_sign">
+                说两句：
+                <div class="cancel_comment_reply">
+                    <a id="cancel_comment_reply_link" href="javascript:;" style="display:none"
+                       onclick="return cancelReply();">取消回复</a>
+                </div>
+            </div>
+            {% if result.allow_comment %}
+                {% include "blog/model/comment_form.html" %}
+            {% else %}
+                <div class="comment_sign"
+                     style="background-color: #fff; padding: 10px; border: 1px solid #e4e4e4; text-align: center">
+                    <i class="icon icon-lock"></i>
+                    作者暂未开放评论
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

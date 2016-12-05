@@ -1,0 +1,215 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>文件管理系统</title>
+
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
+
+    {# 样式表 #}
+    <link rel="stylesheet" type="text/css" href={% static 'common/css/reset.css' %}>
+    <link rel="stylesheet" type="text/css" href="{% static 'filemanage/css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href={% static 'blog/css/font-awesome.min.css'%}>
+
+    {# 脚本加载 #}
+    <script type="text/javascript" src="{% static 'jQuery/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'common/js/jquery_pop_window.js' %}"></script>
+    <script type="text/javascript" src="{% static 'common/js/OverLoadFunction.js' %}"></script>
+    <script type="text/javascript" src="{% static 'filemanage/js/GridViewController.js' %}"></script>
+    <script type="text/javascript" src="{% static 'filemanage/js/script.js' %}"></script>
+</head>
+<body>
+    <div class="wrap">
+        <header class="header">
+
+        </header>
+        <div class="body">
+            <div class="side_panel">
+                <div class="logo">
+                    <h3>断崖上的风</h3>
+                    <p>文件管理系统</p>
+                </div>
+                <ul class="folder_index">
+                    <li>
+                        <a href=""><i class="icon icon-folder-open-alt"></i>全部文件</a>
+                    </li>
+                    <li>
+                        <a href=""><i class="icon icon-picture"></i>图片</a>
+                    </li>
+                    <li>
+                        <a href=""><i class="icon icon-file-alt"></i>文档</a>
+                    </li>
+                    <li>
+                        <a href=""><i class="icon icon-film"></i>视频</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="main_panel">
+                <div class="toolbar">
+                    <ul class="operation_buttons">
+                        <li class="button">
+                            <a href="javascript:;" onclick="$('#upload_type_select').window('open')">
+                                <i class="icon icon-upload-alt"></i>
+                                上传文件
+                            </a>
+                        </li>
+                        <li class="button">
+                            <a href="javascript:;" id="newFolderBtn">
+                                <i class="icon icon-folder-close"></i>
+                                新建文件夹
+                            </a>
+                        </li>
+                        <li class="button">
+                            <a href="javascript:;" id="deleteFileBtn" style="display: none">
+                                <i class="icon icon-trash"></i>
+                                删除
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="group_buttons">
+                        <li class="button active"><a href=""><i class="icon icon-th"></i></a></li>
+                        <li class="button"><a href=""><i class="icon icon-th-list"></i></a></li>
+                    </ul>
+                </div>
+                <div class="list_dir_info">
+                    <ul class="list_dir">
+{#                        <li><a href="">全部文件</a>&nbsp;</li>#}
+{#                        <li>&gt;&nbsp;<a href="">新建文件夹</a>&nbsp;</li>#}
+{#                        <li>&gt;&nbsp;<a href="">新建文件夹</a>&nbsp;</li>#}
+                    </ul>
+                    <span class="list_dir_tips">共24个</span>
+                </div>
+                <div class="grid_view_container">
+{#                    <div class="grid_view_item">#}
+{#                        <input id="file_0001" class="file_checkbox" type="checkbox" style="display: none">#}
+{#                        <label class="checkbox" for="file_0001">#}
+{#                            <i class="icon icon-check"></i>#}
+{#                            <i class="icon icon-check-empty"></i>#}
+{#                        </label>#}
+{#                        <div class="file_icon icon_folder_large">#}
+{#                            <img src="" alt="" class="thumb">#}
+{#                        </div>#}
+{#                        <div class="file_name">#}
+{#                            <a href="">新建文件夹</a>#}
+{#                        </div>#}
+{#                    </div>#}
+                </div>
+            </div>
+
+            {#文件上传form#}
+            <div id="upload_type_select" style="visibility: hidden" data-title="请选择要上传的文件类型">
+                <p>
+                    <span class="button">
+                        <a href="javascript:;" onclick="$('#upload_type_select').window('close');$('#upload_file_form').window('open')">
+                            <i class="icon icon-file"></i>
+                            &nbsp;普通文件
+                        </a>
+                    </span>
+                </p>
+                <p>
+                    <span class="button">
+                        <a href="javascript:;" onclick="$('#upload_type_select').window('close');$('#upload_img_form').window('open')">
+                            <i class="icon icon-picture"></i>
+                            图片文件
+                        </a>
+                    </span>
+                </p>
+            </div>
+            <div id="upload_img_form" style="visibility: hidden;" data-title="请选择要上传的图片">
+                <form action="add" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" value="image">
+                    <p>
+                        <input type="file" multiple name="files" required="required" accept="image/jpeg, image/gif, image/png">
+                    </p>
+                    <p>
+                        <input type="checkbox" id="need_origin" name="need_origin" checked="checked" value="1"><label for="need_origin">保存原图</label>
+                        <input type="checkbox" id="need_thumb" name="need_thumb" checked="checked" value="1"><label for="need_thumb">保存缩略图</label>
+                    </p>
+                    <button type="submit">确认上传</button>
+                </form>
+            </div>
+            <div id="upload_file_form" style="visibility: hidden;" data-title="请选择要上传的文件">
+                <form action="add" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" value="file">
+                    <p><input type="file" multiple name="files" required="required"></p>
+                    <button type="submit">确认上传</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer">
+        </div>
+    </div>
+</body>
+</html>
+
+{##}
+{#<div class="window_toolbar">#}
+{#                {% if parent_dir %}#}
+{#                    <div id="navigation">#}
+{#                        <a href="{{ parent_dir }}">#}
+{#                            <i class="icon icon-arrow-up"></i>#}
+{#                            返回上一级#}
+{#                        </a>#}
+{#                    </div>#}
+{#                {% endif %}#}
+{#                    <div id="toolbar_btn">#}
+{#                        <a href="javascript:;" title="全选"><i class="icon icon-th"></i></a>#}
+{#                        <a href="javascript:;" title="上传" onclick="$('#upload_type_select').window('open')"><i class="icon icon-cloud-upload"></i></a>#}
+{#                        <a href="javascript:;" title="删除"><i class="icon icon-remove-sign"></i></a>#}
+{#                    </div>#}
+{#            </div>#}
+{#            <div class="window_panel">#}
+{#                <ul>#}
+{#                    {% for dir in dirs %}#}
+{#                        <li class="folder" title="{{ dir.modified_time }}" data-url="{{ dir.url }}">#}
+{#                            <i class="icon icon-folder-close-alt"></i>#}
+{#                            <p>{{ dir.name }}</p>#}
+{#                        </li>#}
+{#                    {% endfor %}#}
+{#                    {% for file in files %}#}
+{#                        <li class="folder" title="{{ file.name }}&#10{{ file.modified_time }}" data-url="{{ file.url }}">#}
+{#                                <i class="icon icon-file-alt"></i>#}
+{#                                <p>{{ file.name }}</p>#}
+{#                            </li>#}
+{#                    {% endfor %}#}
+{#                </ul>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div id="footer"></div>#}
+{#    </div>#}
+{#    <div id="upload_type_select" style="visibility: hidden" data-title="请选择要上传的文件类型">#}
+{#        <p><a href="javascript:;" onclick="$('#upload_type_select').window('close');$('#upload_file_form').window('open')">#}
+{#            <i class="icon icon-file"></i>#}
+{#            普通文件#}
+{#        </a></p>#}
+{#        <p><a href="javascript:;" onclick="$('#upload_type_select').window('close');$('#upload_img_form').window('open')">#}
+{#            <i class="icon icon-picture"></i>#}
+{#            图片文件#}
+{#        </a></p>#}
+{#    </div>#}
+{#    <div id="upload_img_form" style="visibility: hidden;" data-title="请选择要上传的图片">#}
+{#        <form action="add" method="post" enctype="multipart/form-data">#}
+{#            {% csrf_token %}#}
+{#            <input type="hidden" name="type" value="image">#}
+{#            <p>#}
+{#                <input type="file" multiple name="files" required="required" accept="image/jpeg, image/gif, image/png">#}
+{#            </p>#}
+{#            <p>#}
+{#                <input type="checkbox" id="need_origin" name="need_origin" checked="checked" value="1"><label for="need_origin">保存原图</label>#}
+{#                <input type="checkbox" id="need_thumb" name="need_thumb" checked="checked" value="1"><label for="need_thumb">保存缩略图</label>#}
+{#            </p>#}
+{#            <button type="submit">确认上传</button>#}
+{#        </form>#}
+{#    </div>#}
+{#    <div id="upload_file_form" style="visibility: hidden;" data-title="请选择要上传的文件">#}
+{#        <form action="add" method="post" enctype="multipart/form-data">#}
+{#            {% csrf_token %}#}
+{#            <input type="hidden" name="type" value="file">#}
+{#            <p><input type="file" multiple name="files" required="required"></p>#}
+{#            <button type="submit">确认上传</button>#}
+{#        </form>#}
+{#    </div>#}

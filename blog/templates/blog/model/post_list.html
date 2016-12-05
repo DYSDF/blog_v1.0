@@ -1,0 +1,41 @@
+{#公共博文列表模板#}
+
+{% for article in result.object_list %}
+    <article class="post">
+        <div class="post_header">
+            <div class="post_title">
+                <div class="post_category">
+                <i class="icon icon-bookmark"></i>
+                <a href="/search/cat/{{ article.cat.id }}">{{ article.cat }}</a>
+                </div>
+                <a href="/article/{{ article.create_time | date:"Y-m-d" }}/{{ article.pk }}">{{ article.title }}</a>
+            </div>
+        </div>
+        <ul class="post_meta">
+            <li>
+                <i class="icon icon-user"></i>
+                <a href="/search/author/{{ article.author.id }}">{{ article.author }}</a>
+            </li>
+            <li>
+                <i class="icon icon-calendar"></i>
+                <span>{{ article.create_time | date:"Y-m-d" }}</span>
+            </li>
+            <li>
+                <i class="icon icon-tags"></i>
+                {% for tag in article.tag.all %}
+                    <a href="/search/tag/{{ tag.id }}">{{ tag }}</a>{% if not forloop.last %}、{% endif %}
+                {% endfor %}
+            </li>
+            <li>
+                <i class="icon icon-comments"></i>
+                <span>
+                    <a href="/article/{{ article.create_time | date:"Y-m-d" }}/{{ article.pk }}#comments">{{ article.comments.all | length }}</a>
+                </span>
+            </li>
+        </ul>
+        <div class="post_content">
+            {{ article.abstract | safe }}
+            <p class="more"><a href="/article/{{ article.create_time | date:"Y-m-d" }}/{{ article.pk }}">阅读剩余部分</a></p>
+        </div>
+    </article>
+{% endfor %}

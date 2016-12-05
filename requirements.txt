@@ -1,0 +1,11 @@
+django==1.10.4
+django-suit==0.2.22
+MySQL-python==1.2.5
+pyquery==1.2.17
+Image==1.5.5
+requests==2.12.3
+pycrypto==2.6.1
+bs4==0.0.1
+logger==1.4
+config==0.3.9
+future==0.16.0
