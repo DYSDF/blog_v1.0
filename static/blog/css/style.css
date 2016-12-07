@@ -11,6 +11,19 @@ html, body {
     overflow: hidden;
 }
 
+blockquote {
+    margin: 10px 20px;
+    padding: 8px 10px;
+    border-left: 8px solid;
+    font-style: italic;
+    background-color: #e4e4e4;
+    overflow: auto;
+}
+
+blockquote p {
+    margin: 0;
+}
+
 .body {
     height: 100%;
     background: #f1f1f1 url('../images/body_background.jpg') repeat scroll top left;
