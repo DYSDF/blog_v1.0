@@ -110,5 +110,5 @@ require(["jquery"], function ($) {
 
 // 滚动条进度插件
 require(['ScrollProgressBar'], function (SPB) {
-    new ScrollProgressBar(document.getElementsByClassName("body")[0]);
+    new SPB(document.getElementsByClassName("body")[0]);
 });

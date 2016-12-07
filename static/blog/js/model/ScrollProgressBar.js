@@ -7,7 +7,7 @@
 
 define([], function () {
     if (window.ScrollProgressBar == null) {
-        return window.ScrollProgressBar = function (el) {
+        window.ScrollProgressBar = function (el) {
 
             var self = this;
 
@@ -53,4 +53,6 @@ define([], function () {
             this.targetEl.scrollTop += 1;
         }
     }
+
+    return window.ScrollProgressBar;
 });
