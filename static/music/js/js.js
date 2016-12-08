@@ -7,66 +7,76 @@ require(["ScrollText"], function (ScrollText) {
 });
 
 (function () {
-    // 界面手势
-    (function () {
-        // 内容面板自适应
-        function setContentHeight() {
-            document.getElementById("content").style.height = document.documentElement.offsetHeight - 50 + "px";
+    // 内容面板自适应
+    function setContentHeight() {
+        document.getElementById("content").style.height = document.documentElement.offsetHeight - 50 + "px";
+    }
+
+    window.addEventListener("resize", setContentHeight);
+    setContentHeight();
+})();
+
+// 控制面板显示控制
+(function () {
+    var target = document.getElementById("content"),
+        maxHeight = document.documentElement.offsetHeight - 50,
+        minHeight = maxHeight - 60,
+        isDraging,
+        isValid,
+        startPosition,
+        stepX,
+        stepY,
+        curPanelHeight;
+
+    function setControlPanelHeight(offsetY) {
+        var targetHeight = curPanelHeight + offsetY;
+        targetHeight = targetHeight > maxHeight ? maxHeight : (targetHeight < minHeight ? minHeight : targetHeight);
+        target.style.height = targetHeight + "px";
+    }
+
+    function resetControlPanelHeight() {
+        curPanelHeight = target.offsetHeight;
+        if (maxHeight + minHeight > curPanelHeight * 2) {
+            setControlPanelHeight(minHeight - curPanelHeight - 1);
+        } else {
+            setControlPanelHeight(maxHeight - target.offsetHeight + 1);
         }
+    }
 
-        window.addEventListener("resize", setContentHeight);
-        setContentHeight();
+    document.addEventListener("mousedown", function (e) {
+        isDraging = true;
 
-        // 设置控制面板显示
-        function setControlPanel(offsetY) {
-            if (Math.abs(offsetY) > 50) return;
-            console.log(offsetY);
-            document.getElementById("content").style.height = (document.documentElement.offsetHeight - 60 + offsetY) + "px";
+        e = e || window.event;
+        startPosition = {
+            x: e.clientX,
+            y: e.clientY
+        };
+
+        curPanelHeight = target.offsetHeight;
+
+        target.style.transition = "height 0ms ease-in-out";
+    });
+    document.addEventListener("mousemove", function (e) {
+        if (!isDraging) return;
+
+        e = e || window.event;
+        if (isValid) {
+            setControlPanelHeight((e.clientY - startPosition.y) / 10);
+        } else {
+            stepX = e.clientX - startPosition.x;
+            stepY = e.clientY - startPosition.y;
+            if (Math.abs(stepX) < 10 && Math.abs(stepY) < 10) return;
+            Math.abs(stepX) > Math.abs(stepY) ? (isValid = false) : (isValid = true);
         }
+    });
+    document.addEventListener("mouseup", function (e) {
+        isValid = false;
+        isDraging = false;
 
-        // 监听全局手势
-        (function () {
-            var isDraging,
-                startPosition,
-                endPosition,
-                direction,
-                stepX,
-                stepY;
+        target.style.transition = "";
 
-            document.addEventListener("mousedown", function (e) {
-                isDraging = true;
-
-                e = e || window.event;
-                startPosition = {
-                    x: e.clientX,
-                    y: e.clientY
-                }
-            });
-            document.addEventListener("mousemove", function (e) {
-                if (!isDraging) return;
-
-                e = e || window.event;
-                if (direction) {
-                    if (direction === "v") {
-                        console.log("V");
-                    } else if (direction === "h") {
-                        setControlPanel(e.clientY - startPosition.y);
-                    }
-                } else {
-                    stepX = e.clientX - startPosition.x;
-                    stepY = e.clientY - startPosition.y;
-                    if (Math.abs(stepX) < 10 && Math.abs(stepY) < 10) return;
-
-                    Math.abs(stepX) > Math.abs(stepY) ? (direction = "v") : (direction = "h");
-                }
-            });
-            document.addEventListener("mouseup", function (e) {
-                direction = null;
-                isDraging = false;
-            })
-        })()
-
-    })();
+        resetControlPanelHeight();
+    })
 })();
 
 // 拖拽界面控制
