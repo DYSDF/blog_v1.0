@@ -35,7 +35,7 @@ def getPlayList(request):
     playlist = cache.get("music_play_list")
     if playlist is None:
         playlist = music.return_toplists()
-        cache.set("music_play_list", playlist, 24 * 60 * 60)
+        cache.set("music_play_list", playlist, 30 * 24 * 60 * 60)
     return HttpResponse(json.dumps(playlist), content_type="application/json")
 
 
@@ -60,5 +60,5 @@ def getSongLyric(request):
     lrc = cache.get("music_lrc_" + musicId)
     if lrc is None:
         lrc = music.song_lyric(musicId)
-        cache.set("music_lrc_" + musicId, lrc, 24 * 60 * 60)
+        cache.set("music_lrc_" + musicId, lrc, 30 * 24 * 60 * 60)
     return HttpResponse(json.dumps(lrc), content_type="application/json")

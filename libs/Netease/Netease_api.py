@@ -158,7 +158,7 @@ class NetEase(object):
         self.playlist_class_dict = {}
         self.session = requests.Session()
         self.proxies = {
-            "http": "http://59.107.26.220:10000"
+            "http": "http://111.13.109.27:80"
         }
 
     def return_toplists(self):

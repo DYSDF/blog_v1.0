@@ -12,17 +12,14 @@ require.config({
         "jquery": "jQuery/jquery.min",
         "jCookie": "jQuery/jquery.cookie",
 
-        // 自定义模块
-        "ajaxArticle": "blog/js/model/ajaxArticles",
-
         // 保持元素悬浮
-        "fixButtons": "blog/js/model/fix_buttons",
+        "fixButtons": "common/js/fix_buttons",
 
         // 滚动条进度插件
-        "ScrollProgressBar": "blog/js/model/ScrollProgressBar",
+        "ScrollProgressBar": "common/js/ScrollProgressBar",
 
         // post_line页面工具集
-        "post_line_util": "blog/js/model/post_line_util",
+        "post_line_util": "common/js/post_line_util",
 
         
         // 代码高亮方案
@@ -37,9 +34,15 @@ require.config({
         "highlight": "ckeditor/plugins/codesnippet/lib/highlight/highlight.pack",
 
         // TextArea高度自适应插件
-        "autoTextAreaHeight": "blog/js/model/autoTextareaHeight",
+        "autoTextAreaHeight": "common/js/autoTextareaHeight",
 
         // 快速滚动插件
-        "FastScroll": "blog/js/model/FastScroll",
+        "FastScroll": "common/js/FastScroll",
+
+        // 简易音乐播放器
+        "SimpleMusicPlayer": "common/js/SimpleMusicPlayer",
+
+        // 文字滚动插件
+        "ScrollText": "common/js/ScrollText"
     }
 });

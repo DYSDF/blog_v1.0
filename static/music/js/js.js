@@ -1,99 +1,135 @@
 // JavaScript Document
+// 界面滚动文字
+require(["ScrollText"], function (ScrollText) {
+    [].forEach.call(document.getElementsByClassName("scroll_text"), function (el) {
+        ScrollText(el);
+    }.bind(this))
+});
 
-(function($){
-    $.fn.scrollText = function(){
-        var self = this;
-        if(this.get(0).scrollWidth > this.get(0).offsetWidth){
-            var maxScrollLeft = this.get(0).scrollWidth - this.get(0).offsetWidth,
-                time = maxScrollLeft * 80,
-
-                scrollLeft = function(){
-                    self.stop(true, false).animate({scrollLeft: maxScrollLeft}, time, "linear", function(){
-                        setTimeout(scrollRight, 1000);
-                    });
-                },
-
-                scrollRight = function(){
-                    self.stop(true, false).animate({scrollLeft: "0"}, time, "linear", function(){
-                        setTimeout(scrollLeft, 1000);
-                    });
-                };
-            scrollLeft();
+(function () {
+    // 界面手势
+    (function () {
+        // 内容面板自适应
+        function setContentHeight() {
+            document.getElementById("content").style.height = document.documentElement.offsetHeight - 50 + "px";
         }
-    }
-})(jQuery);
 
+        window.addEventListener("resize", setContentHeight);
+        setContentHeight();
 
-// 拖拽界面控制
-$(function(){
-    // 初始化界面
-    var winH = $(window).height();
-    $(window).on("resize", function () {
-        winH = $(window).height();
-        toggleInfoPanel(0);
-    });
+        // 设置控制面板显示
+        function setControlPanel(offsetY) {
+            if (Math.abs(offsetY) > 50) return;
+            console.log(offsetY);
+            document.getElementById("content").style.height = (document.documentElement.offsetHeight - 60 + offsetY) + "px";
+        }
 
-    $("#content").css("height", winH - 50);
+        // 监听全局手势
+        (function () {
+            var isDraging,
+                startPosition,
+                endPosition,
+                direction,
+                stepX,
+                stepY;
 
-    // 定义界面操作手势
-    $(document).on("mousedown", function(e){
-        if(e.which === 1){
-            var lastX = e.clientX,
-                lastY = e.clientY,
-                time = e.timeStamp;
+            document.addEventListener("mousedown", function (e) {
+                isDraging = true;
 
-            $(document).one("mouseup", function (e) {
-                if(e.which === 1 && e.timeStamp - time < 1000 && window.getSelection().anchorOffset == 0){
-                    var offsetX = e.clientX - lastX,
-                        offsetY = e.clientY - lastY,
-                        offset = Math.max(Math.abs(offsetX), Math.abs(offsetY));
-                    if(offset >= 100){
-                        if(Math.abs(offsetX) > Math.abs(offsetY)){
-                            var t = offsetX > 0 ? -1 : 1;
-                            openlist(t);
-                        } else {
-                            var t = offsetY > 0 ? 0 : 1;
-                            toggleInfoPanel(t);
-                        }
-                    }
+                e = e || window.event;
+                startPosition = {
+                    x: e.clientX,
+                    y: e.clientY
                 }
             });
-        }
-    }).on("dragstart", function () {
-        if(window.getSelection().focusOffset == 0)
-            return false;
-    });
+            document.addEventListener("mousemove", function (e) {
+                if (!isDraging) return;
 
-    // 信息面板弹出
-    function toggleInfoPanel(t){
-        $("#content").css("height", function () {
-            return winH - 50 - 60 * t;
-        });
-    }
+                e = e || window.event;
+                if (direction) {
+                    if (direction === "v") {
+                        console.log("V");
+                    } else if (direction === "h") {
+                        setControlPanel(e.clientY - startPosition.y);
+                    }
+                } else {
+                    stepX = e.clientX - startPosition.x;
+                    stepY = e.clientY - startPosition.y;
+                    if (Math.abs(stepX) < 10 && Math.abs(stepY) < 10) return;
 
-    //点击列表按钮弹出歌曲列表，并点击自身外隐藏列表
-    $("#listopen").on("mouseup", function (e) {
-        if($(this).hasClass("openlist")){
-            openlist(-1);
-        } else {
-            openlist(1);
-        }
-        return false;
-    });
-
-    function openlist(t){
-        if(t == 1){
-            $("#songPanel").addClass("panelOpen");
-            $("#listopen").addClass("openlist");
-            $(document).one("mouseup", function () {
-                $("#songPanel").removeClass("panelOpen");
-                $("#listopen").removeClass("openlist");
+                    Math.abs(stepX) > Math.abs(stepY) ? (direction = "v") : (direction = "h");
+                }
+            });
+            document.addEventListener("mouseup", function (e) {
+                direction = null;
+                isDraging = false;
             })
-        } else {
-            $("#songPanel").removeClass("panelOpen");
-            $("#listopen").removeClass("openlist");
-        }
-    }
+        })()
+
+    })();
+})();
+
+// 拖拽界面控制
+$(function () {
+    // 定义界面操作手势
+    // $(document).on("mousedown", function (e) {
+    //     if (e.which === 1) {
+    //         var lastX = e.clientX,
+    //             lastY = e.clientY,
+    //             time = e.timeStamp;
+    //
+    //         $(document).one("mouseup", function (e) {
+    //             if (e.which === 1 && e.timeStamp - time < 1000 && window.getSelection().anchorOffset == 0) {
+    //                 var offsetX = e.clientX - lastX,
+    //                     offsetY = e.clientY - lastY,
+    //                     offset = Math.max(Math.abs(offsetX), Math.abs(offsetY));
+    //                 if (offset >= 100) {
+    //                     if (Math.abs(offsetX) > Math.abs(offsetY)) {
+    //                         var t = offsetX > 0 ? -1 : 1;
+    //                         openlist(t);
+    //                     } else {
+    //                         var t = offsetY > 0 ? 0 : 1;
+    //                         toggleInfoPanel(t);
+    //                     }
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }).on("dragstart", function () {
+    //     if (window.getSelection().focusOffset == 0)
+    //         return false;
+    // });
+    //
+    // // 信息面板弹出
+    // function toggleInfoPanel(t) {
+    //     $("#content").css("height", function () {
+    //         return document.documentElement.offsetHeight - 50 - 60 * t;
+    //     });
+    // }
+    //
+    // //点击列表按钮弹出歌曲列表，并点击自身外隐藏列表
+    // $("#listopen").on("mouseup", function (e) {
+    //     if ($(this).hasClass("openlist")) {
+    //         openlist(-1);
+    //     } else {
+    //         openlist(1);
+    //     }
+    //     return false;
+    // });
+    //
+    // function openlist(t) {
+    //     if (t == 1) {
+    //         $("#songPanel").addClass("panelOpen");
+    //         $("#listopen").addClass("openlist");
+    //         $(document).one("mouseup", function () {
+    //             $("#songPanel").removeClass("panelOpen");
+    //             $("#listopen").removeClass("openlist");
+    //         })
+    //     } else {
+    //         $("#songPanel").removeClass("panelOpen");
+    //         $("#listopen").removeClass("openlist");
+    //     }
+    // }
 
 
     //自定义音乐播放器
@@ -106,10 +142,10 @@ $(function(){
         _config: {"autoplay": false, "loop": "repeat", "muted": false, "volume": 0.5},// 默认设置
         init: function (songlist) {
             // 加载预设及历史设置
-            for(var i in this._config){
-                if(i == "muted"){
+            for (var i in this._config) {
+                if (i == "muted") {
                     this._player.muted = $.cookie(i) ? eval($.cookie(i)) : this._config.i;
-                } else if(i == "volume"){
+                } else if (i == "volume") {
                     this._player.volume = $.cookie(i) ? eval($.cookie(i)) : this._config.i;
                 } else {
 
@@ -121,10 +157,10 @@ $(function(){
                 self.next();
             });
 
-            if(songlist == undefined) return;
+            if (songlist == undefined) return;
             this._songList = songlist;
-            if(!this.loadDate()){
-                if($.cookie("autoplay") ? eval($.cookie(autoplay)) : this._config["autoplay"]){
+            if (!this.loadDate()) {
+                if ($.cookie("autoplay") ? eval($.cookie(autoplay)) : this._config["autoplay"]) {
                     this.play();
                 }
             }
@@ -132,10 +168,10 @@ $(function(){
         },
         setConfig: function (name, val) {
             this._config[name] = val;
-            $.cookie(name, val, { expires: 365});
+            $.cookie(name, val, {expires: 365});
         },
         loadDate: function () {
-            if(this._songList.length > 0){
+            if (this._songList.length > 0) {
                 this._player.src = this._songList[this._playlistId].songs[this._curSong].mp3Url;
                 return true;
             } else {
@@ -143,7 +179,7 @@ $(function(){
             }
         },
         play: function () {
-            if(this._player.paused){
+            if (this._player.paused) {
                 this._player.autoplay = true;
                 this.setConfig("autoplay", true);
                 this._player.play();
@@ -154,20 +190,20 @@ $(function(){
             }
         },
         next: function () {
-            if(this._songList.length == 0) return false;
+            if (this._songList.length == 0) return false;
             this._history.push(this._curSong);
             this._curSong += 1;
-            if(this._songList[this._playlistId].songs.length < this._curSong) this._curSong = 0;
+            if (this._songList[this._playlistId].songs.length < this._curSong) this._curSong = 0;
             this.loadDate();
         },
         prev: function () {
-            if(this._songList.length == 0 || this._history.length == 0) return false;
+            if (this._songList.length == 0 || this._history.length == 0) return false;
             this._curSong = this._history.pop();
             this.loadDate();
         },
         jump: function (x) {
-            if(this._songList.length == 0) return false;
-            if(x < 0 || x > this._songList[this._playlistId].songs.length) return false;
+            if (this._songList.length == 0) return false;
+            if (x < 0 || x > this._songList[this._playlistId].songs.length) return false;
             this._history.push(this._curSong);
             this._curSong = x * 1;
             this.loadDate();
@@ -208,9 +244,9 @@ $(function(){
     });
     $("#control_vol").on("click", function () {
         dymusic.mute();
-    }).on("mousewheel DOMMouseScroll", function(e){
+    }).on("mousewheel DOMMouseScroll", function (e) {
         var delta = (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) || (e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1));
-        if(delta>0){
+        if (delta > 0) {
             //向上滚动
             dymusic.volPlus();
         } else {
@@ -224,9 +260,9 @@ $(function(){
         var curT = dymusic._player.currentTime,
             toT = dymusic._player.duration;
         $("#durCurTime").text(function () {
-            return [parseInt(curT/60), Math.round(curT % 60)].join(":").replace(/\b(\d)\b/g, "0$1");
+            return [parseInt(curT / 60), Math.round(curT % 60)].join(":").replace(/\b(\d)\b/g, "0$1");
         });
-        $("#durprogress .progress").css("width", function(){
+        $("#durprogress .progress").css("width", function () {
             return curT / toT * 100 + "%";
         });
 
@@ -239,15 +275,15 @@ $(function(){
             album = dymusic._songList[dymusic._playlistId].songs[dymusic._curSong].album.name,
             tolTime = dymusic._player.duration;
 
-        $("#music_name").text("《" + title + "》").scrollText();
-        $("#music_ablum span").text(album).scrollText();
+        $("#music_name").text("《" + title + "》");
+        $("#music_ablum span").text(album);
         $("#music_art span").text(function () {
             var text = [];
-            for(var i in artists){
+            for (var i in artists) {
                 text.push(artists[i].name);
             }
             return text.join("/");
-        }).scrollText();
+        });
 
         $("#durprogress .progress").css("width", 0);
         $("#durCurTime").text("00:00");
@@ -257,8 +293,8 @@ $(function(){
             $(this).removeClass("cursong");
         }).eq(dymusic._curSong).addClass("cursong");
 
-        $("#control_ablum").css("background-image", "url("+ dymusic._songList[dymusic._playlistId].songs[dymusic._curSong].album.picUrl + ")");
-        $("#blur_img").css("background-image", "url("+ dymusic._songList[dymusic._playlistId].songs[dymusic._curSong].album.blurPicUrl + ")");
+        $("#control_ablum").css("background-image", "url(" + dymusic._songList[dymusic._playlistId].songs[dymusic._curSong].album.picUrl + ")");
+        $("#blur_img").css("background-image", "url(" + dymusic._songList[dymusic._playlistId].songs[dymusic._curSong].album.blurPicUrl + ")");
 
         highLight();
 
@@ -267,7 +303,7 @@ $(function(){
     // 播放器音量改变时
     $(dymusic._player).on("volumechange", function () {
         var vol = dymusic._player.volume;
-        if(dymusic._player.muted || vol == 0){
+        if (dymusic._player.muted || vol == 0) {
             $("#control_vol").addClass("muted").attr("data-vol", Math.round(vol * 100));
         } else {
             $("#control_vol").removeClass("muted").attr("data-vol", Math.round(vol * 100));
@@ -286,7 +322,7 @@ $(function(){
 
 
     // 获取歌词
-    function getLyric(){
+    function getLyric() {
         var playlistId = dymusic._playlistId,
             songId = dymusic._curSong,
             playlist = dymusic._songList,
@@ -308,18 +344,18 @@ $(function(){
     }
 
     // 歌词解析器
-    function parseLyric(lrc){
-        try{
+    function parseLyric(lrc) {
+        try {
             var lyrics = lrc.split("\n");
             var lrcObj = {};
-            for(var i = 0; i < lyrics.length; i++){
+            for (var i = 0; i < lyrics.length; i++) {
                 var lyric = decodeURIComponent(lyrics[i]);
                 var timeReg = /\[\d*:\d*((\.|\:)\d*)*\]/g;
                 var timeRegExpArr = lyric.match(timeReg);
-                if(!timeRegExpArr) continue;
+                if (!timeRegExpArr) continue;
                 var clause = lyric.replace(timeReg, "");
-                if(clause == "" || clause == undefined) continue; // 去除空白行
-                for(var k = 0, h = timeRegExpArr.length; k < h; k++) {
+                if (clause == "" || clause == undefined) continue; // 去除空白行
+                for (var k = 0, h = timeRegExpArr.length; k < h; k++) {
                     var t = timeRegExpArr[k];
                     var min = Number(String(t.match(/\[\d*/i)).slice(1)),
                         sec = Number(String(t.match(/\:\d*/i)).slice(1));
@@ -327,19 +363,19 @@ $(function(){
                     lrcObj[time] = clause;
                 }
             }
-        } catch (e){
-            var lrcObj = { 0: "暂无歌词"};
+        } catch (e) {
+            var lrcObj = {0: "暂无歌词"};
         }
         renderLyric(lrcObj);
     }
 
     // 歌词渲染展示
-    function renderLyric(lrcObj){
+    function renderLyric(lrcObj) {
         var lrcEl = $("<ul></ul>"),
             stepOffset,
             m = 0,
             n = 0;
-        for(var i in lrcObj){
+        for (var i in lrcObj) {
             var li = $("<li id=" + i + ">" + lrcObj[i] + "</li>");
             lrcEl.append(li);
             m++;
@@ -350,26 +386,26 @@ $(function(){
         stepOffset = $("#songlrc ul").get(0).offsetHeight / m;
 
         lrcObj["parsed"] = {};
-        for(var i in lrcObj){
+        for (var i in lrcObj) {
             lrcObj["parsed"][i] = n * stepOffset;
             n++;
-            if(n == m) break;
+            if (n == m) break;
         }
         dymusic._lrcEl = lrcEl;
         dymusic._lyric = lrcObj;
     }
 
     // 歌词滚动
-    function showLrc(time){
-        try{
+    function showLrc(time) {
+        try {
             var time = parseInt(time),
-            top = dymusic._lyric.parsed[time];
-            if(top){
+                top = dymusic._lyric.parsed[time];
+            if (top) {
                 dymusic._lrcEl.css("margin-top", -top);
                 $("#songlrc ul").children("#" + time).prev("li").removeClass("on");
                 $("#songlrc ul").children("#" + time).addClass("on");
             }
-        } catch(e){
+        } catch (e) {
 
         }
 
@@ -377,7 +413,7 @@ $(function(){
 
 
     // 歌曲跳转
-    function jumpSong(){
+    function jumpSong() {
         var pId = $(this).attr("data-pId"),
             songId = $(this).attr("id");
         dymusic._playlistId = parseInt(pId);
@@ -385,7 +421,7 @@ $(function(){
     }
 
     // 高亮列表已播放歌单及歌曲
-    function highLight(){
+    function highLight() {
         // 歌单高亮
         $("#playlist ol li").each(function () {
             $(this).removeClass("cur");
@@ -399,18 +435,18 @@ $(function(){
     }
 
     // 生成歌曲列表
-    function makeSonglist(pId, data){
+    function makeSonglist(pId, data) {
         $("#songlist ol").empty();
 
         // 返回按钮
         var back = $("<div id='back'>返回上一层</div>");
-        back.unbind("click").on("click", function(e){
+        back.unbind("click").on("click", function (e) {
             e.stopPropagation();
             $("#songContainer").animate({"margin-left": "0"}, 600, "linear");
         });
         $("#songlist ol").append(back);
 
-        for(var i in data){
+        for (var i in data) {
             var li = $("<li id=\"" + i + "\" data-pId=\"" + pId + "\"><div class=\"musicName\">" + data[i].name + "</div><div class=\"musicTime\">" + formatTime(data[i].duration / 1000) + "</div></li>");
             li.on("click", jumpSong);
             $("#songlist ol").append(li);
@@ -420,9 +456,9 @@ $(function(){
     }
 
     // 歌单点击跳转
-    function changePanel(e){
+    function changePanel(e) {
         var pId = $(this).attr("data-id");
-        if(dymusic._songList[pId].songs == undefined){
+        if (dymusic._songList[pId].songs == undefined) {
             $.ajax({
                 url: "/music/toplist",
                 method: "POST",
@@ -453,15 +489,15 @@ $(function(){
     }
 
     // 歌单生成
-    function makePlaylist(data){
-        $("#songPanel").on("mouseup click", function(e){
+    function makePlaylist(data) {
+        $("#songPanel").on("mouseup click", function (e) {
             e.stopPropagation();
             return false;
         });
 
         $("#playlist ol").empty();
 
-        for(var i in data){
+        for (var i in data) {
             var li = $("<li data-id=\"" + data[i].id + "\"><div class=\"playlistName\">《" + data[i].name + "》</div></li>");
             li.on("click", changePanel);
             $("#playlist ol").append(li);
@@ -472,7 +508,7 @@ $(function(){
     var localPlaylist = window.localStorage.getItem("playlist"),
         updateTime = window.localStorage.getItem("playlistUpdateTime"),
         nowTime = new Date().getDate();
-    if(localPlaylist == null || updateTime < nowTime){
+    if (localPlaylist == null || updateTime < nowTime) {
         $.ajax({
             url: "/music/playlist",
             method: "POST",
@@ -500,20 +536,20 @@ $(function(){
 });
 
 // 歌曲时间格式化
-function formatTime(t){
+function formatTime(t) {
     return [parseInt(t / 60), Math.round(t % 60)].join(":").replace(/\b(\d)\b/g, "0$1")
 }
 
 //获取范围随机整数
-function getRandom(a,b){
+function getRandom(a, b) {
     var index = Math.min(a, b);  //获取范围偏移
     var rang = Math.max(a, b) - Math.min(a, b);  //获取范围区间
-    return Math.floor(Math.random()*(rang+1))+index;
+    return Math.floor(Math.random() * (rang + 1)) + index;
 }
 
 //阻止事件冒泡
-function stopBubble(e){
-    if (e && e.stopPropagation){
+function stopBubble(e) {
+    if (e && e.stopPropagation) {
         //非IE浏览器
         e.stopPropagation();
     } else {
@@ -523,53 +559,53 @@ function stopBubble(e){
 }
 
 //登录处理
-$(function(){
-    var loginli=document.getElementsByClassName("userlogin");
-    var logoutli=document.getElementsByClassName("userlogout");
-    var regli=document.getElementsByClassName("userjoin");
-    for(i=0; i<loginli.length; i++){
-        if(window.addEventListener){
+$(function () {
+    var loginli = document.getElementsByClassName("userlogin");
+    var logoutli = document.getElementsByClassName("userlogout");
+    var regli = document.getElementsByClassName("userjoin");
+    for (i = 0; i < loginli.length; i++) {
+        if (window.addEventListener) {
             loginli[i].addEventListener("click", login, false);
         } else {
             loginli[i].attachEvent("onclick", login);
         }
     }
-    for(var i = 0; i < logoutli.length; i++){
-        if(window.addEventListener){
+    for (var i = 0; i < logoutli.length; i++) {
+        if (window.addEventListener) {
             logoutli[i].addEventListener("click", logout, false);
         } else {
             logoutli[i].attachEvent("onclick", logout);
         }
     }
-    for(i=0; i<regli.length; i++){
-        if(window.addEventListener){
+    for (i = 0; i < regli.length; i++) {
+        if (window.addEventListener) {
             regli[i].addEventListener("click", join, false);
         } else {
             regli[i].attachEvent("onclick", join);
         }
     }
 
-    function login(e){
+    function login(e) {
         $.ajax({
             type: 'GET',
             url: '/accounts/login/',
-            success: function(data){
-                var html=new DOMParser().parseFromString(data, "text/html"),
-                    box=$(html).find(".user_mask").get(0);
+            success: function (data) {
+                var html = new DOMParser().parseFromString(data, "text/html"),
+                    box = $(html).find(".user_mask").get(0);
                 $(box).find(".user_box").get(0).onclick = stopBubble;
-                var fli=$(box).find(".form");
-                for(i=0; i<fli.length; i++){
-                    fli[i].onsubmit=function(e){
-                        var func = function(data){
-                            var msg = eval("("+data+")");
-                            if(msg.error){
+                var fli = $(box).find(".form");
+                for (i = 0; i < fli.length; i++) {
+                    fli[i].onsubmit = function (e) {
+                        var func = function (data) {
+                            var msg = eval("(" + data + ")");
+                            if (msg.error) {
                                 $(box).find("msg").eq(0).html(msg.error);
-                                if(msg.info){
-                                    for(var i in msg.info){
-                                        e.target[i].style.backgroundColor="#FFBFBF";
+                                if (msg.info) {
+                                    for (var i in msg.info) {
+                                        e.target[i].style.backgroundColor = "#FFBFBF";
                                     }
                                 }
-                            } else if(msg.success){
+                            } else if (msg.success) {
                                 $(box).find("msg").eq(0).html(msg.success);
                                 setTimeout("window.location.reload(true)", 3000);
                             } else {
@@ -581,66 +617,73 @@ $(function(){
                         return false;
                     };
                 }
-                $(box).click(function(){document.body.removeChild(this)});
+                $(box).click(function () {
+                    document.body.removeChild(this)
+                });
                 document.body.appendChild(box);
             }
         });
     }
 
-    function logout(e){
+    function logout(e) {
         $.ajax({
             type: 'GET',
             url: '/accounts/logout/',
-            success: function(){ alert("注销成功！");window.location.reload(true); }
+            success: function () {
+                alert("注销成功！");
+                window.location.reload(true);
+            }
         });
     }
 
-    function join(e){
+    function join(e) {
         $.ajax({
             type: 'GET',
             url: '/accounts/join/',
-            success: function(res){
-                var html=new DOMParser().parseFromString(res.responseText, "text/html"),
-                    box=html.body.getElementsByClassName("user_mask")[0];
-                box.getElementsByClassName("user_box")[0].onclick=stopBubble;
-                box.getElementsByClassName("login_box")[0].style.float="right";
-                var fli=box.getElementsByTagName("form");
-                for(var i = 0; i < fli.length; i++){
-                    fli[i].onsubmit=function(e){
-                        var func = function(res){
-                            var msg = eval("("+res.responseText+")");
-                            if(msg.error){
-                                box.getElementsByTagName("msg")[0].innerHTML=msg.error;
-                                if(msg.info){
-                                    for(var i in msg.info){
-                                        e.target[i].style.backgroundColor="#FFBFBF";
+            success: function (res) {
+                var html = new DOMParser().parseFromString(res.responseText, "text/html"),
+                    box = html.body.getElementsByClassName("user_mask")[0];
+                box.getElementsByClassName("user_box")[0].onclick = stopBubble;
+                box.getElementsByClassName("login_box")[0].style.float = "right";
+                var fli = box.getElementsByTagName("form");
+                for (var i = 0; i < fli.length; i++) {
+                    fli[i].onsubmit = function (e) {
+                        var func = function (res) {
+                            var msg = eval("(" + res.responseText + ")");
+                            if (msg.error) {
+                                box.getElementsByTagName("msg")[0].innerHTML = msg.error;
+                                if (msg.info) {
+                                    for (var i in msg.info) {
+                                        e.target[i].style.backgroundColor = "#FFBFBF";
                                     }
                                 }
-                            } else if(msg.success){
-                                box.getElementsByTagName("msg")[0].innerHTML=msg.success;
+                            } else if (msg.success) {
+                                box.getElementsByTagName("msg")[0].innerHTML = msg.success;
                                 setTimeout("window.location.reload(true)", 3000);
                             } else {
-                                box.getElementsByTagName("msg")[0].innerHTML="注册失败，请重试";
+                                box.getElementsByTagName("msg")[0].innerHTML = "注册失败，请重试";
                                 setTimeout("window.location.reload(true)", 3000);
                             }
                         };
                         formpost(func);
                     };
                 }
-                box.onclick=function(){document.body.removeChild(this)};
+                box.onclick = function () {
+                    document.body.removeChild(this)
+                };
                 document.body.appendChild(box);
             }
         });
     }
 
-    function formpost(func){
+    function formpost(func) {
         var e = arguments.callee.caller.arguments[0] ? arguments.callee.caller.arguments[0] : window.event;
         e.preventDefault();
         var form = e.target;
         var data = new FormData(form);
         $.ajax({
             url: form.action,
-            type: (form.method?form.method:"GET"),
+            type: (form.method ? form.method : "GET"),
             data: data,
             success: func
         });

@@ -5,9 +5,11 @@
     <meta charset="utf-8">
     <title>断崖FM</title>
     <link rel="stylesheet" type="text/css" href="{% static 'music/css/style.css' %}">
+
     <script type="text/javascript" language="javascript" src="{% static 'jQuery/jquery.min.js' %}"></script>
     <script type="text/javascript" language="javascript" src="{% static 'jQuery/jquery.cookie.js' %}"></script>
-    <script type="text/javascript" language="javascript" src="{% static 'music/js/js.js' %}"></script>
+    <script type="text/javascript" src={% static 'requireJS/require.js' %}></script>
+    <script type="text/javascript" src={% static 'requireJS/require_config.js' %}></script>
 </head>
 <body>
 <div id="container">
@@ -24,7 +26,8 @@
                 <div id="control_ablum" class="rotate_stop"></div>
             </span>
             <span class="control_btn"><a id="control_next" href="javascript: void(0);"><span></span></a></span>
-            <span class="control_btn"><a id="control_vol" href="javascript: void(0);" data-vol="100"><span></span></a></span>
+            <span class="control_btn"><a id="control_vol" href="javascript: void(0);"
+                                         data-vol="100"><span></span></a></span>
         </div>
         <div id="songPanel">
             <div id="songContainer">
@@ -46,10 +49,10 @@
             </ul>
         </div>
         <div id="songinfo">
-            <div id="music_name">《暂无歌曲》</div>
+            <div id="music_name" class="scroll_text">《暂无歌曲》</div>
             <div class="music_info">
-                <div id="music_ablum">专辑：<span>暂无专辑</span></div>
-                <div id="music_art">歌手：<span>暂无歌手</span></div>
+                <div id="music_ablum">专辑：<span class="scroll_text">暂无专辑</span></div>
+                <div id="music_art">歌手：<span class="scroll_text">暂无歌手</span></div>
             </div>
         </div>
         <div id="songdur">
@@ -63,5 +66,6 @@
         <a href="javascript: void(0);" id="listopen"><span></span></a>
     </div>
 </div>
+<script type="text/javascript" language="javascript" src="{% static 'music/js/js.js' %}"></script>
 </body>
 </html>
