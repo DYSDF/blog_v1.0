@@ -9,6 +9,8 @@ from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
 from pyquery import PyQuery
 
+import cgi
+
 from libs.FileManage.FileStorage import ImageStorage
 
 
@@ -62,7 +64,7 @@ def get_first_lines(String=""):
     abstract_text = []
     count = 1
     for line in orig_html.children():
-        abstract_text.append("<p>" + PyQuery(line).text() + "</p>")
+        abstract_text.append("<p>" + cgi.escape(PyQuery(line).text()) + "</p>")
         if count > 4:
             break
         else:

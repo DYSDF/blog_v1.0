@@ -38,5 +38,8 @@ require.config({
 
         // TextArea高度自适应插件
         "autoTextAreaHeight": "blog/js/model/autoTextareaHeight",
+
+        // 快速滚动插件
+        "FastScroll": "blog/js/model/FastScroll",
     }
 });

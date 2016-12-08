@@ -59,3 +59,22 @@ require(['jquery'], function () {
         }
     })
 });
+
+// 全局快速滚动插件
+require(["FastScroll"], function (FastScroll) {
+    var fastScroll = new FastScroll(document.getElementsByClassName("body")[0]);
+    fastScroll.onScroll = function (scrollTop) {
+        var ev = document.getElementById("go_to_top"),
+            className = ev.className;
+        if (scrollTop > window.screen.availHeight / 2) {
+            ev.className = className.replace(new RegExp("show"), " ").trim() + " show";
+        } else {
+            ev.className = className.replace(new RegExp("show"), " ").trim();
+        }
+    };
+    document.addEventListener("click", function (e) {
+        e = e || window.event;
+        if (e.target.id != "go_to_top") return false;
+        fastScroll.goTop();
+    })
+});

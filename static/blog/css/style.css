@@ -785,6 +785,51 @@ blockquote p {
     max-height: 0;
 }
 
+/*快速返回顶部*/
+#go_to_top {
+    position: fixed;
+    bottom: 60px;
+    right: 80px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 10%;
+    font-size: 26px;
+    color: #999;
+    text-align: center;
+    background: #e4e4e4;
+    z-index: 99999;
+
+    -webkit-transform: translate3d(300%, 0, 0) rotate(360deg);
+    -moz-transform: translate3d(300%, 0, 0) rotate(360deg);
+    -ms-transform: translate3d(300%, 0, 0) rotate(360deg);
+    -o-transform: translate3d(300%, 0, 0) rotate(360deg);
+    transform: translate3d(300%, 0, 0) rotate(360deg);
+
+    -webkit-transition: transform 600ms;
+    -moz-transition: transform 600ms;
+    -ms-transition: transform 600ms;
+    -o-transition: transform 600ms;
+    transition: transform 600ms;
+}
+
+#go_to_top.show {
+    -webkit-transform: translate3d(0, 0, 0) rotate(0deg);
+    -moz-transform: translate3d(0, 0, 0) rotate(0deg);
+    -ms-transform: translate3d(0, 0, 0) rotate(0deg);
+    -o-transform: translate3d(0, 0, 0) rotate(0deg);
+    transform: translate3d(0, 0, 0) rotate(0deg);
+}
+
+#go_to_top:hover {
+    color: #666;
+    background: #d3d3d3;
+}
+
+#go_to_top:before {
+    content: "\f062";
+}
+
 @media (max-width: 800px) {
     #wrap {
         width: 100%;
