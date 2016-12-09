@@ -8,6 +8,9 @@ require.config({
         "jCookie": ["jquery"]
     },
     paths: {
+        // 自定义工具集
+        DYUtils: "common/js/Utils",
+
         // jQuery
         "jquery": "jQuery/jquery.min",
         "jCookie": "jQuery/jquery.cookie",

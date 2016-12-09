@@ -6,8 +6,8 @@ require(["ScrollText"], function (ScrollText) {
     }.bind(this))
 });
 
+// 内容面板自适应
 (function () {
-    // 内容面板自适应
     function setContentHeight() {
         document.getElementById("content").style.height = document.documentElement.offsetHeight - 50 + "px";
     }
@@ -17,7 +17,7 @@ require(["ScrollText"], function (ScrollText) {
 })();
 
 // 控制面板显示控制
-(function () {
+require(["DYUtils"], function (DYUtils) {
     var target = document.getElementById("content"),
         maxHeight = document.documentElement.offsetHeight - 50,
         minHeight = maxHeight - 60,
@@ -43,25 +43,21 @@ require(["ScrollText"], function (ScrollText) {
         }
     }
 
-    document.addEventListener("mousedown", function (e) {
+    DYUtils.bindEvent(document, "mousedown", function (e) {
         isDraging = true;
-
         e = e || window.event;
         startPosition = {
             x: e.clientX,
             y: e.clientY
         };
-
         curPanelHeight = target.offsetHeight;
-
-        target.style.transition = "height 0ms ease-in-out";
     });
-    document.addEventListener("mousemove", function (e) {
+    DYUtils.bindEvent(document, "mousemove", function (e) {
         if (!isDraging) return;
-
         e = e || window.event;
         if (isValid) {
-            setControlPanelHeight((e.clientY - startPosition.y) / 10);
+            target.style.transition = "height 0ms ease-in-out";
+            setControlPanelHeight((e.clientY - startPosition.y) / 2);
         } else {
             stepX = e.clientX - startPosition.x;
             stepY = e.clientY - startPosition.y;
@@ -69,79 +65,149 @@ require(["ScrollText"], function (ScrollText) {
             Math.abs(stepX) > Math.abs(stepY) ? (isValid = false) : (isValid = true);
         }
     });
-    document.addEventListener("mouseup", function (e) {
+    DYUtils.bindEvent(document, "mouseup", function (e) {
         isValid = false;
         isDraging = false;
-
         target.style.transition = "";
-
         resetControlPanelHeight();
     })
-})();
+});
 
-// 拖拽界面控制
+// 歌曲列表面板显示控制
+require(["DYUtils"], function (DYUtils) {
+    var songPanel = document.getElementById("songPanel"),
+        songPanelBtn = document.getElementById("listopen"),
+        maxOffsetX = 1,
+        minOffsetX = 0,
+        regexp = /matrix\(((\d+\.?\d*),\s){5}\d+\.?\d*\)/,
+        isDraging,
+        isValid,
+        startPosition,
+        stepX,
+        stepY,
+        curTransform;
+
+    function isPanelOpen() {
+        return DYUtils.hasClassName(songPanel, "open");
+    }
+
+    function setSongPanelTransform(offsetX) {
+        var targetOffsetX = (curTransform + offsetX) / songPanel.offsetWidth;
+        targetOffsetX = targetOffsetX > maxOffsetX ? maxOffsetX : (targetOffsetX < minOffsetX ? minOffsetX : targetOffsetX);
+        songPanel.style.transform = "translate3d(" + targetOffsetX * 100 + "%, 0, 0)";
+    }
+
+    function showSongPanel() {
+        if (!isPanelOpen()) {
+            DYUtils.addClassName(songPanel, "open");
+            DYUtils.addClassName(songPanelBtn, "openlist");
+
+            DYUtils.removeEvent(document, "mouseup", hideSongPanel);
+            DYUtils.oneEvent(document, "mouseup", hideSongPanel);
+        }
+    }
+
+    function hideSongPanel() {
+        if (isPanelOpen()) {
+            DYUtils.removeClassName(songPanel, "open");
+            DYUtils.removeClassName(songPanelBtn, "openlist");
+        }
+
+    }
+
+    function toggleSongPanel() {
+        if (isPanelOpen()) {
+            hideSongPanel();
+        } else {
+            showSongPanel();
+        }
+    }
+
+    function resetSongPanel() {
+        if (Number(DYUtils.getCssValue(songPanel, "transform").match(regexp)[2]) / songPanel.offsetWidth > 0.5) {
+            hideSongPanel();
+        } else {
+            showSongPanel();
+        }
+        songPanel.style.transform = "";
+    }
+
+    DYUtils.bindEvent(document, "mousedown", function (e) {
+        isDraging = true;
+        e = e || window.event;
+        startPosition = {
+            x: e.clientX,
+            y: e.clientY
+        };
+        curTransform = Number(DYUtils.getCssValue(songPanel, "transform").match(regexp)[2]);
+        hideSongPanel();
+    });
+    DYUtils.bindEvent(document, "mousemove", function (e) {
+        if (!isDraging) return;
+        e = e || window.event;
+        if (isValid) {
+            songPanel.style.transition = "all 0ms linear";
+            setSongPanelTransform((e.clientX - startPosition.x) / 2);
+        } else {
+            stepX = e.clientX - startPosition.x;
+            stepY = e.clientY - startPosition.y;
+            if (Math.abs(stepX) < 10 && Math.abs(stepY) < 10) return;
+            Math.abs(stepX) < Math.abs(stepY) ? (isValid = false) : (isValid = true);
+        }
+    });
+    DYUtils.bindEvent(document, "mouseup", function (e) {
+        if (isValid) {
+            isValid = false;
+            resetSongPanel();
+        }
+        songPanel.style.transition = "";
+        isDraging = false;
+    });
+    DYUtils.bindEvent(songPanelBtn, "mousedown", function (e) {
+        e.stopPropagation();
+    });
+    DYUtils.bindEvent(songPanelBtn, "mouseup", function (e) {
+        e.stopPropagation();
+        toggleSongPanel();
+    });
+    DYUtils.bindEvent(songPanel, "mousedown", function (e) {
+        e.stopPropagation();
+    })
+});
+
+// 音乐播放控制
+require(["DYUtils"], function (DYUtils) {
+    var musicPlayer = document.createElement("audio"),
+        songList = [];
+
+    function init() {
+        // 加载预设及历史设置
+        for (var i in this._config) {
+            if (i == "muted") {
+                this._player.muted = $.cookie(i) ? eval($.cookie(i)) : this._config.i;
+            } else if (i == "volume") {
+                this._player.volume = $.cookie(i) ? eval($.cookie(i)) : this._config.i;
+            } else {
+
+            }
+        }
+
+        var self = this;
+        $(this._player).on("ended", function () {
+            self.next();
+        });
+
+        if (songlist == undefined) return;
+        this._songList = songlist;
+        if (!this.loadDate()) {
+            if ($.cookie("autoplay") ? eval($.cookie(autoplay)) : this._config["autoplay"]) {
+                this.play();
+            }
+        }
+    }
+});
+
 $(function () {
-    // 定义界面操作手势
-    // $(document).on("mousedown", function (e) {
-    //     if (e.which === 1) {
-    //         var lastX = e.clientX,
-    //             lastY = e.clientY,
-    //             time = e.timeStamp;
-    //
-    //         $(document).one("mouseup", function (e) {
-    //             if (e.which === 1 && e.timeStamp - time < 1000 && window.getSelection().anchorOffset == 0) {
-    //                 var offsetX = e.clientX - lastX,
-    //                     offsetY = e.clientY - lastY,
-    //                     offset = Math.max(Math.abs(offsetX), Math.abs(offsetY));
-    //                 if (offset >= 100) {
-    //                     if (Math.abs(offsetX) > Math.abs(offsetY)) {
-    //                         var t = offsetX > 0 ? -1 : 1;
-    //                         openlist(t);
-    //                     } else {
-    //                         var t = offsetY > 0 ? 0 : 1;
-    //                         toggleInfoPanel(t);
-    //                     }
-    //                 }
-    //             }
-    //         });
-    //     }
-    // }).on("dragstart", function () {
-    //     if (window.getSelection().focusOffset == 0)
-    //         return false;
-    // });
-    //
-    // // 信息面板弹出
-    // function toggleInfoPanel(t) {
-    //     $("#content").css("height", function () {
-    //         return document.documentElement.offsetHeight - 50 - 60 * t;
-    //     });
-    // }
-    //
-    // //点击列表按钮弹出歌曲列表，并点击自身外隐藏列表
-    // $("#listopen").on("mouseup", function (e) {
-    //     if ($(this).hasClass("openlist")) {
-    //         openlist(-1);
-    //     } else {
-    //         openlist(1);
-    //     }
-    //     return false;
-    // });
-    //
-    // function openlist(t) {
-    //     if (t == 1) {
-    //         $("#songPanel").addClass("panelOpen");
-    //         $("#listopen").addClass("openlist");
-    //         $(document).one("mouseup", function () {
-    //             $("#songPanel").removeClass("panelOpen");
-    //             $("#listopen").removeClass("openlist");
-    //         })
-    //     } else {
-    //         $("#songPanel").removeClass("panelOpen");
-    //         $("#listopen").removeClass("openlist");
-    //     }
-    // }
-
-
     //自定义音乐播放器
     var dymusic = {
         _player: document.createElement("audio"),
@@ -540,9 +606,7 @@ $(function () {
         dymusic._songList = JSON.parse(localPlaylist);
         makePlaylist(JSON.parse(localPlaylist));
     }
-
     dymusic.init();
-
 });
 
 // 歌曲时间格式化
