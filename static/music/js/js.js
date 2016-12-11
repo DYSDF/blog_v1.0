@@ -337,6 +337,22 @@ require(["DYUtils", "SimpleMusicPlayer"], function (DYUtils, SimpleMusicPlayer) 
         MusicPlayer.next()
     });
 
+    // 监听音量点击事件
+    DYUtils.bindEvent(document.getElementById("control_vol"), "click", function () {
+        MusicPlayer.mute();
+    });
+    DYUtils.bindEvent(document.getElementById("control_vol"), "mousewheel DOMMouseScroll", function (e) {
+        e = e || window.event;
+        var delta = (e.wheelDelta && (e.wheelDelta > 0 ? 1 : -1)) || (e.detail && (e.detail > 0 ? -1 : 1));
+        if (delta > 0) {
+            //向上滚动
+            MusicPlayer.volPlus();
+        } else {
+            MusicPlayer.volSub();
+        }
+    });
+
+
     // 监听播放器事件
     MusicPlayer.listener("play", function () {
         DYUtils.addClassName(document.getElementById("control_play"), "control_pause");
@@ -372,6 +388,17 @@ require(["DYUtils", "SimpleMusicPlayer"], function (DYUtils, SimpleMusicPlayer) 
             document.querySelector("#control_ablum").style.backgroundImage = "url(" + songInfo.album.picUrl + ")";
             document.querySelector("#blur_img").style.backgroundImage = "url(" + songInfo.album.blurPicUrl + ")";
         }
+    });
+
+    MusicPlayer.listener("volumechange", function () {
+        if (this.muted) {
+            DYUtils.addClassName(document.getElementById("control_vol"), "muted");
+        } else {
+            DYUtils.removeClassName(document.getElementById("control_vol"), "muted");
+        }
+    });
+    MusicPlayer.listener("volumechange", function () {
+        document.getElementById("control_vol").dataset.vol = parseInt(this.volume * 100);
     });
 
     getSongListJson(renderSongListPanel);

@@ -7,6 +7,7 @@ define(["DYUtils"], function (DYUtils) {
         opts = opts || {};
 
         var player = new Audio();
+        var volume = opts.volume || 0.5;
         var songList = opts.songList || [];
         var songIndex = opts.songIndex || 0;
 
@@ -14,6 +15,7 @@ define(["DYUtils"], function (DYUtils) {
 
 
         function init() {
+            player.volume = volume;
             if (songList[songIndex]) {
                 player.src = songList[songIndex].mp3Url || "";
             }
@@ -55,6 +57,28 @@ define(["DYUtils"], function (DYUtils) {
         function prev() {
             var index = songIndex * 1 - 1 < 0 ? songList.length - 1 : songIndex * 1 - 1;
             play(index);
+        }
+
+        function volPlus() {
+            try {
+                player.volume = Math.round(player.volume * 100) / 100 + 0.02;
+            } catch (e) {
+
+            }
+            player.muted = false;
+        }
+
+        function volSub() {
+            try {
+                player.volume = Math.round(player.volume * 100) / 100 - 0.02;
+            } catch (e) {
+
+            }
+            player.muted = false;
+        }
+
+        function mute() {
+            player.muted = !player.muted;
         }
 
         function listener(type, fn) {
@@ -130,6 +154,9 @@ define(["DYUtils"], function (DYUtils) {
             pause: pause,
             next: next,
             prev: prev,
+            volPlus: volPlus,
+            volSub: volSub,
+            mute: mute,
             listener: listener
         }
 
