@@ -375,6 +375,19 @@ a:hover, a:active, a:focus {
 #songContainer {
     height: inherit;
     width: 200%;
+
+    -webkit-transition: transform 600ms;
+    -moz-transition: transform 600ms;
+    -ms-transition: transform 600ms;
+    -o-transition: transform 600ms;
+    transition: transform 600ms;
+}
+#songContainer.open {
+    -webkit-transform: translate3d(-50%, 0, 0);
+    -moz-transform: translate3d(-50%, 0, 0);
+    -ms-transform: translate3d(-50%, 0, 0);
+    -o-transform: translate3d(-50%, 0, 0);
+    transform: translate3d(-50%, 0, 0);;
 }
 
 #songContainer > div {
@@ -584,7 +597,7 @@ a:hover, a:active, a:focus {
 #durprogress {
     position: relative;
     height: inherit;
-    margin-right: 180px;
+    margin-right: 200px;
 }
 
 #durprogress .bg {
@@ -622,7 +635,7 @@ a:hover, a:active, a:focus {
     position: absolute;
     top: 0;
     right: 60px;
-    width: 100px;
+    width: 120px;
     height: inherit;
     text-align: center;
 }

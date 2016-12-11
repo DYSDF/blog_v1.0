@@ -501,30 +501,6 @@ blockquote p {
     transform: translateX(4px);
 }
 
-#post_list .year_li > div {
-    margin-right: -47px;
-}
-
-#post_list .year_li > ul {
-    margin-left: 47px;
-}
-
-#post_list .mouth_li > div {
-    margin-right: -27px;
-}
-
-#post_list .mouth_li > ul {
-    margin-left: 27px;
-}
-
-#post_list .day_li > div {
-    margin-right: -20px;
-}
-
-#post_list .day_li > ul {
-    margin-left: 20px;
-}
-
 #show_time {
     position: fixed;
     height: 30px;

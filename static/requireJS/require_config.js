@@ -43,7 +43,7 @@ require.config({
         "FastScroll": "common/js/FastScroll",
 
         // 简易音乐播放器
-        "SimpleMusicPlayer": "common/js/SimpleMusicPlayer",
+        "SimpleMusicPlayer": "common/js/MusicPlayer",
 
         // 文字滚动插件
         "ScrollText": "common/js/ScrollText"
