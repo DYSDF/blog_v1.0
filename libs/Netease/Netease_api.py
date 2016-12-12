@@ -157,9 +157,7 @@ class NetEase(object):
         self.cookies = {'appver': '1.5.2'}
         self.playlist_class_dict = {}
         self.session = requests.Session()
-        self.proxies = {
-            "http": "http://111.13.109.27:80"
-        }
+        self.proxies = {}
 
     def return_toplists(self):
         temp = []

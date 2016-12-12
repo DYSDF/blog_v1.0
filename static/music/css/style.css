@@ -179,14 +179,20 @@ a:hover, a:active, a:focus {
 
 /* 中间部分样式 */
 #control {
-    display: table;
-    height: inherit;
-    width: inherit;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    width: 100%;
+    margin: auto;
 }
 
 #control .control_btn {
-    display: table-cell;
+    float: left;
     width: 18%;
+    height: 100%;
     vertical-align: middle;
     text-align: center;
 }
@@ -197,7 +203,7 @@ a:hover, a:active, a:focus {
     width: 100px;
     height: 100px;
     line-height: 100px;
-    border-radius: 50px;
+    border-radius: 50%;
     background-color: #fff;
     box-shadow: 0 0 4px rgba(0, 0, 0, .3);
     text-decoration: none;
@@ -252,8 +258,7 @@ a:hover, a:active, a:focus {
 }
 
 #control .control_playbtn {
-    /*position: relative;*/
-    display: table-cell;
+    float: left;
     width: 28%;
     vertical-align: middle;
     text-align: center;
@@ -298,7 +303,7 @@ a:hover, a:active, a:focus {
     left: 50%;
     width: 300px;
     height: 300px;
-    border-radius: 150px;
+    border-radius: 50%;
     margin-top: -150px;
     margin-left: -150px;
     background-color: #383838;
@@ -382,6 +387,7 @@ a:hover, a:active, a:focus {
     -o-transition: transform 600ms;
     transition: transform 600ms;
 }
+
 #songContainer.open {
     -webkit-transform: translate3d(-50%, 0, 0);
     -moz-transform: translate3d(-50%, 0, 0);
@@ -517,16 +523,21 @@ a:hover, a:active, a:focus {
 
 #songlrc ul {
     list-style: none;
-    -webkit-transition: margin-top 600ms ease-in-out;
-    -moz-transition: margin-top 600ms ease-in-out;
-    -ms-transition: margin-top 600ms ease-in-out;
-    -o-transition: margin-top 600ms ease-in-out;
-    transition: margin-top 600ms ease-in-out;
+    -webkit-transition: transform 600ms ease-in-out;
+    -moz-transition: transform 600ms ease-in-out;
+    -ms-transition: transform 600ms ease-in-out;
+    -o-transition: transform 600ms ease-in-out;
+    transition: transform 600ms ease-in-out;
 }
 
 #songlrc li {
     font-size: 16px;
     transition: font-size 600ms linear;
+}
+
+#songlrc .lrc_content {
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 #songlrc .on {
@@ -671,87 +682,3 @@ a:hover, a:active, a:focus {
     left: 12px;
     background-position: -3px -51px;
 }
-
-/*登录条样式*/
-.log_bar {
-    margin: 0 8px;
-    font-size: 14px;
-    color: #D09D16;
-    font-weight: bold;
-}
-
-.userlogin, .userlogout, .userjoin {
-    cursor: pointer;
-}
-
-.user_bar {
-    color: white;
-    background-color: rgb(123, 132, 0);
-    display: block;
-    padding: 0 10px;
-    cursor: default;
-}
-
-/*登录注册框样式*/
-.user_mask {
-    position: fixed;
-    z-index: 9999;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background-color: rgba(160, 160, 160, 0.75);
-}
-
-.user_box {
-    overflow: hidden;
-    width: 290px;
-    margin: 200px auto;
-    background-color: white;
-}
-
-.login_box {
-    display: table;
-}
-
-.c_tab {
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 6px;
-    color: #400707;
-}
-
-.c_tab span {
-    display: inline-block;
-    cursor: pointer;
-}
-
-.login_box form {
-    display: table-cell;
-    padding: 10px;
-    vertical-align: middle;
-}
-
-.login_box dt {
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-.login_box label {
-    width: 60px;
-    display: inline-block;
-}
-
-.login_box dt input {
-    padding: 4px;
-    width: 200px;
-    border: 1px solid #BBBBBB;
-}
-
-.sub_btn {
-    float: right;
-    width: 80px;
-    height: 30px;
-}
-

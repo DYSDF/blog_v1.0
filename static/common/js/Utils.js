@@ -5,6 +5,32 @@
 define([], function () {
     var DYUtils = {
         // JS 设计模式
+        // 转换成object
+        toObject: function (str) {
+            var obj = JSON.parse(str);
+            if (typeof obj != "object") {
+                return arguments.callee(obj);
+            }
+            return obj;
+        },
+
+        // 阻止高频触发
+        debounce: function (func, wait, immediate) {
+            var timeout;
+            return function () {
+                var context = this,
+                    args = arguments;
+                var later = function () {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+                var callNow = immediate && !timeout;
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+                if (callNow) func.apply(context, args);
+            };
+        },
+
         // 单例模式
         Singleton: function (fn) {
             var result;
@@ -14,27 +40,49 @@ define([], function () {
         },
         // DOM 操作类
         hasClassName: function (target, className) {
-            return new RegExp(className).test(target.className);
+            if (target.className) {
+                return target.className.split(" ").some(function (item) {
+                    return item == className;
+                });
+            } else {
+                return false;
+            }
         },
         addClassName: function (target, className) {
-            target.className = (" " + className);
+            if (Object.prototype.toString.call(target) === "[object HTMLCollection]") {
+                [].slice.call(target).forEach(function (item) {
+                    this.addClassName(item, className);
+                }.bind(this))
+            } else {
+                if (!this.hasClassName(target, className)) {
+                    target.className = (target.className + " " + className).trim();
+                }
+            }
         },
         removeClassName: function (target, className) {
-            var classArray = target.className.split(" ");
-            classArray = classArray.filter(function (item) {
-                if(item == className || !item){
-                    return false;
-                } else {
-                    return true;
-                }
-            });
-            target.className = classArray.join(" ");
+            if (Object.prototype.toString.call(target) === "[object HTMLCollection]") {
+                [].slice.call(target).forEach(function (item) {
+                    this.removeClassName(item, className);
+                }.bind(this))
+            } else {
+                var classArray = target.className.split(" ");
+                classArray = classArray.filter(function (item) {
+                    return !(item == className || !item);
+                });
+                target.className = classArray.join(" ");
+            }
         },
         toggleClassName: function (target, className) {
-            if (new RegExp(className).test(target.className)) {
-                this.removeClassName(target, className);
+            if (Object.prototype.toString.call(target) === "[object HTMLCollection]") {
+                [].slice.call(target).forEach(function (item) {
+                    this.toggleClassName(item, className);
+                }.bind(this))
             } else {
-                this.addClassName(target, className);
+                if (this.hasClassName(target, className)) {
+                    this.removeClassName(target, className);
+                } else {
+                    this.addClassName(target, className);
+                }
             }
         },
         getCss: function (target) {
@@ -126,10 +174,10 @@ define([], function () {
 
         // localStorage 操作
         setLocalStorage: function (key, value) {
-            window.localStorage.setItem(key, JSON.stringify(value))
+            window.localStorage.setItem(key, JSON.stringify(value));
         },
         getLocalStorage: function (key) {
-            return JSON.parse(window.localStorage.getItem(key));
+            return window.localStorage.getItem(key);
         },
 
         //ajax 操作

@@ -15,6 +15,7 @@ define(["DYUtils"], function (DYUtils) {
 
 
         function init() {
+            player.autoplay = false;
             player.volume = volume;
             if (songList[songIndex]) {
                 player.src = songList[songIndex].mp3Url || "";
@@ -41,6 +42,7 @@ define(["DYUtils"], function (DYUtils) {
                 if (songList[songIndex]) {
                     player.src = songList[songIndex].mp3Url || "";
                 }
+                trigger("change", [index]);
             }
             player.play();
         }
@@ -52,11 +54,13 @@ define(["DYUtils"], function (DYUtils) {
         function next() {
             var index = songIndex * 1 + 1 >= songList.length ? 0 : songIndex * 1 + 1;
             play(index);
+            trigger("change", [index]);
         }
 
         function prev() {
             var index = songIndex * 1 - 1 < 0 ? songList.length - 1 : songIndex * 1 - 1;
             play(index);
+            trigger("change", [index]);
         }
 
         function volPlus() {
@@ -103,7 +107,7 @@ define(["DYUtils"], function (DYUtils) {
         // 事件监听
         // 当音频可以播放时
         DYUtils.bindEvent(player, "canplay", function () {
-            trigger("canplay", [songList[songIndex], songIndex]);
+            trigger("canplay");
         });
 
         // 当播放结束时
