@@ -136,9 +136,10 @@ require(["DYUtils"], function (DYUtils) {
         songPanel.style.transform = "";
     }
 
-    DYUtils.bindEvent(document, "mousedown", function (e) {
+    DYUtils.bindEvent(document, "mousedown touchstart", function (e) {
         isDraging = true;
-        e = e || window.event;
+        console.log(e);
+        e = e.touches ? e.touches[0] : (e || window.event);
         startPosition = {
             x: e.clientX,
             y: e.clientY
@@ -146,12 +147,12 @@ require(["DYUtils"], function (DYUtils) {
         curTransform = Number(DYUtils.getCssValue(songPanel, "transform").match(regexp)[2]);
         hideSongPanel();
     });
-    DYUtils.bindEvent(document, "mousemove", function (e) {
+    DYUtils.bindEvent(document, "mousemove touchmove", function (e) {
         if (!isDraging) return;
-        e = e || window.event;
+        e = e.touches ? e.touches[0] : (e || window.event);
         if (isValid) {
             songPanel.style.transition = "all 0ms linear";
-            setSongPanelTransform((e.clientX - startPosition.x) / 2);
+            setSongPanelTransform((e.clientX - startPosition.x) / 1.2);
         } else {
             stepX = e.clientX - startPosition.x;
             stepY = e.clientY - startPosition.y;
@@ -159,7 +160,7 @@ require(["DYUtils"], function (DYUtils) {
             Math.abs(stepX) < Math.abs(stepY) ? (isValid = false) : (isValid = true);
         }
     });
-    DYUtils.bindEvent(document, "mouseup", function (e) {
+    DYUtils.bindEvent(document, "mouseup touchend", function (e) {
         if (isValid) {
             isValid = false;
             resetSongPanel();
@@ -174,7 +175,7 @@ require(["DYUtils"], function (DYUtils) {
         e.stopPropagation();
         toggleSongPanel();
     });
-    DYUtils.bindEvent(songPanel, "mousedown", function (e) {
+    DYUtils.bindEvent(songPanel, "mousedown touchstart", function (e) {
         e.stopPropagation();
     })
 });
