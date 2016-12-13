@@ -46,6 +46,9 @@ require.config({
         "SimpleMusicPlayer": "common/js/MusicPlayer",
 
         // 文字滚动插件
-        "ScrollText": "common/js/ScrollText"
+        "ScrollText": "common/js/ScrollText",
+        
+        // 蜘蛛网效果
+        "SpiderWeb": "common/js/SpiderWebPlugin"
     }
 });

@@ -78,3 +78,18 @@ require(["FastScroll"], function (FastScroll) {
         fastScroll.goTop();
     })
 });
+
+
+// 蜘蛛网效果
+require(["jquery", "SpiderWeb"], function ($, SpiderWeb) {
+    $(function () {
+        var spider = new SpiderWeb(document.getElementById("background_canvas"), {
+            radius: 2.5,
+            color: "#4c4c4c",
+            count: 200,
+            scale: 2,
+            maxDistance: 200
+        });
+        spider.start();
+    });
+});

@@ -26,6 +26,7 @@ define([], function () {
             this.progressbar.style.height = "2px";
             this.progressbar.style.background = "linear-gradient(to right top, red, rgb(221, 0, 0))";
             this.progressbar.style.transformOrigin = "left center";
+            this.progressbar.style.zIndex = "9999";
 
             document.getElementsByTagName("body")[0].appendChild(this.progressbar);
 

@@ -56,6 +56,7 @@ define([], function () {
                 return result || (result = fn.apply(this.arguments));
             }
         },
+
         // DOM 操作类
         hasClassName: function (target, className) {
             if (target.className) {
@@ -106,11 +107,9 @@ define([], function () {
         getCss: function (target) {
             return document.defaultView.getComputedStyle(target);
         },
-
         getCssValue: function (target, cssName) {
             return this.getCss(target).getPropertyValue(cssName);
         },
-
         isChildNode: function (obj, parentObj) {
             while (obj != undefined && obj != null && obj.tagName.toUpperCase() != 'BODY') {
                 if (obj == parentObj) {
@@ -189,7 +188,6 @@ define([], function () {
             document.cookie = key + "=;expires=" + new Date().toUTCString();
         },
 
-
         // localStorage 操作
         setLocalStorage: function (key, value) {
             window.localStorage.setItem(key, JSON.stringify(value));
@@ -256,6 +254,18 @@ define([], function () {
             //发送请求
             xhr.send(data);
             return xhr;
+        },
+
+        // 动画操作
+        // 高速动画
+        fastAnimation: function (fn) {
+            var requestAnimation = window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                function (callback) {
+                    window.setTimeout(callback, 1000 / 60);
+                };
+            requestAnimation(fn);
         }
     };
 
