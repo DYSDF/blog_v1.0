@@ -15,7 +15,7 @@ define([], function () {
         },
 
         // 阻止高频触发
-        debounce: function (func, wait, immediate) {
+        deBounce: function (func, wait, immediate) {
             var timeout;
             return function () {
                 var context = this,
@@ -28,6 +28,24 @@ define([], function () {
                 clearTimeout(timeout);
                 timeout = setTimeout(later, wait);
                 if (callNow) func.apply(context, args);
+            };
+        },
+
+        // 降低触发频率
+        deFrames: function (func, wait, immediate) {
+            var lastTime;
+            return function () {
+                var context = this,
+                    args = arguments;
+                var later = function () {
+                    lastTime = Date.now();
+                    func.apply(context, args);
+                };
+                if (immediate && !lastTime) lastTime = Date.now() - wait;
+                lastTime = lastTime || Date.now();
+                if (lastTime + wait <= Date.now()) {
+                    later.call(context)
+                }
             };
         },
 

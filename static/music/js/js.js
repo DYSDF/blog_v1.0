@@ -43,7 +43,7 @@ require(["DYUtils"], function (DYUtils) {
         }
     }
 
-    DYUtils.bindEvent(document, "mousedown", function (e) {
+    DYUtils.bindEvent(target, "mousedown", function (e) {
         isDraging = true;
         e = e || window.event;
         startPosition = {
@@ -52,7 +52,7 @@ require(["DYUtils"], function (DYUtils) {
         };
         curPanelHeight = target.offsetHeight;
     });
-    DYUtils.bindEvent(document, "mousemove", function (e) {
+    DYUtils.bindEvent(target, "mousemove", function (e) {
         if (!isDraging) return;
         e = e || window.event;
         if (isValid) {
@@ -65,21 +65,25 @@ require(["DYUtils"], function (DYUtils) {
             Math.abs(stepX) > Math.abs(stepY) ? (isValid = false) : (isValid = true);
         }
     });
-    DYUtils.bindEvent(document, "mouseup", function (e) {
+    DYUtils.bindEvent(target, "mouseup", function (e) {
         isValid = false;
         isDraging = false;
         target.style.transition = "";
         resetControlPanelHeight();
     });
-    DYUtils.bindEvent(window, "resize", DYUtils.debounce(function (e) {
+    DYUtils.bindEvent(window, "resize", DYUtils.deBounce(function (e) {
         maxHeight = document.documentElement.offsetHeight - 50;
         minHeight = maxHeight - 60;
-    }, 1000))
+    }, 1000));
+    DYUtils.bindEvent(target, "selectstart", function (e) {
+        e.preventDefault();
+    })
 });
 
 // 歌曲列表面板显示控制
 require(["DYUtils"], function (DYUtils) {
-    var songPanel = document.getElementById("songPanel"),
+    var contentPanel = document.getElementById("content"),
+        songPanel = document.getElementById("songPanel"),
         songPanelBtn = document.getElementById("listopen"),
         maxOffsetX = 1,
         minOffsetX = 0,
@@ -106,8 +110,8 @@ require(["DYUtils"], function (DYUtils) {
             DYUtils.addClassName(songPanel, "open");
             DYUtils.addClassName(songPanelBtn, "openlist");
 
-            DYUtils.removeEvent(document, "mouseup", hideSongPanel);
-            DYUtils.oneEvent(document, "mouseup", hideSongPanel);
+            DYUtils.removeEvent(contentPanel, "mouseup touchstart", hideSongPanel);
+            DYUtils.oneEvent(contentPanel, "mouseup touchstart", hideSongPanel);
         }
     }
 
@@ -136,9 +140,8 @@ require(["DYUtils"], function (DYUtils) {
         songPanel.style.transform = "";
     }
 
-    DYUtils.bindEvent(document, "mousedown touchstart", function (e) {
+    DYUtils.bindEvent(contentPanel, "mousedown touchstart", function (e) {
         isDraging = true;
-        console.log(e);
         e = e.touches ? e.touches[0] : (e || window.event);
         startPosition = {
             x: e.clientX,
@@ -147,7 +150,7 @@ require(["DYUtils"], function (DYUtils) {
         curTransform = Number(DYUtils.getCssValue(songPanel, "transform").match(regexp)[2]);
         hideSongPanel();
     });
-    DYUtils.bindEvent(document, "mousemove touchmove", function (e) {
+    DYUtils.bindEvent(contentPanel, "mousemove touchmove", function (e) {
         if (!isDraging) return;
         e = e.touches ? e.touches[0] : (e || window.event);
         if (isValid) {
@@ -160,7 +163,7 @@ require(["DYUtils"], function (DYUtils) {
             Math.abs(stepX) < Math.abs(stepY) ? (isValid = false) : (isValid = true);
         }
     });
-    DYUtils.bindEvent(document, "mouseup touchend", function (e) {
+    DYUtils.bindEvent(contentPanel, "mouseup touchend", function (e) {
         if (isValid) {
             isValid = false;
             resetSongPanel();
@@ -291,22 +294,26 @@ require(["DYUtils", "SimpleMusicPlayer", "ScrollText"], function (DYUtils, Simpl
 
     // 获取歌词
     function getLyricJson(fn) {
-        var id = playList[songIndex][playIndex].id;
-        DYUtils.ajax({
-            url: "/music/getLyric",
-            method: "POST",
-            data: {"songId": id},
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("X-CSRFToken", DYUtils.getCookie("csrftoken"));
-            },
-            success: function (data) {
-                var json = JSON.parse(data);
-                if (fn) fn(parseLyric(json));
-            },
-            error: function () {
-                lyricData = {0: "暂无歌词"}
-            }
-        })
+        try {
+            var id = playList[songIndex][playIndex].id;
+            DYUtils.ajax({
+                url: "/music/getLyric",
+                method: "POST",
+                data: {"songId": id},
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", DYUtils.getCookie("csrftoken"));
+                },
+                success: function (data) {
+                    var json = JSON.parse(data);
+                    if (fn) fn(parseLyric(json));
+                },
+                error: function () {
+                    if (fn) fn(parseLyric({0: "暂无歌词"}));
+                }
+            })
+        } catch (e) {
+            if (fn) fn(parseLyric({0: "暂无歌词"}));
+        }
     }
 
     // 歌词解析器
@@ -465,7 +472,7 @@ require(["DYUtils", "SimpleMusicPlayer", "ScrollText"], function (DYUtils, Simpl
 
 
     // 监听播放器事件
-    MusicPlayer.listener("play", function () {
+    MusicPlayer.listener("playing", function () {
         DYUtils.addClassName(document.getElementById("control_play"), "control_pause");
         DYUtils.removeClassName(document.getElementById("control_ablum"), "rotate_stop");
     });
@@ -473,12 +480,12 @@ require(["DYUtils", "SimpleMusicPlayer", "ScrollText"], function (DYUtils, Simpl
         DYUtils.removeClassName(document.getElementById("control_play"), "control_pause");
         DYUtils.addClassName(document.getElementById("control_ablum"), "rotate_stop");
     });
-    MusicPlayer.listener("timeupdate", function () {
+    MusicPlayer.listener("timeupdate", DYUtils.deFrames(function () {
         document.getElementById("durCurTime").innerHTML = formatTime(this.currentTime);
-    });
-    MusicPlayer.listener("timeupdate", function () {
+    }, 1000, true));
+    MusicPlayer.listener("timeupdate", DYUtils.deFrames(function () {
         document.querySelector("#durprogress .progress").style.width = this.currentTime / this.duration * 100 + "%";
-    });
+    }, 1000, true));
     MusicPlayer.listener("timeupdate", function () {
         var curTime = Math.floor(this.currentTime);
         scrollLyricDOM(curTime);

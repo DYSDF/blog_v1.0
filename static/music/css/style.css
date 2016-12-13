@@ -78,6 +78,33 @@
     }
 }
 
+@-webkit-keyframes warning-animation {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 30px 0;
+    }
+}
+
+@-moz-keyframes warning-animation {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 30px 0;
+    }
+}
+
+@-ms-keyframes warning-animation {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 30px 0;
+    }
+}
+
 body {
     font: 100%/1.4 Microsoft YaHei, Verdana, Arial, Helvetica, sans-serif;
     background-color: #3d3d3d;
@@ -89,6 +116,7 @@ body {
 /*解决div高度无法全屏*/
 html, body {
     height: 100%;
+    overflow: hidden;
 }
 
 ul, ol, dl {
@@ -152,7 +180,7 @@ a:hover, a:active, a:focus {
     line-height: 50px;
     background-color: #333333;
     box-shadow: 0 0 10px black;
-    z-index: 9;
+    z-index: 10;
 }
 
 #content {
@@ -182,12 +210,16 @@ a:hover, a:active, a:focus {
 #control {
     display: table;
     position: absolute;
-    top: 0;
-    bottom: 0;
+    top: 50%;
     left: 0;
-    right: 0;
+    height: 100px;
     width: 100%;
-    margin: auto;
+
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 #control .control_btn {
@@ -534,6 +566,10 @@ a:hover, a:active, a:focus {
 
 #songlrc li {
     font-size: 16px;
+    -webkit-transition: font-size 600ms linear;
+    -moz-transition: font-size 600ms linear;
+    -ms-transition: font-size 600ms linear;
+    -o-transition: font-size 600ms linear;
     transition: font-size 600ms linear;
 }
 
@@ -583,6 +619,10 @@ a:hover, a:active, a:focus {
     float: left;
 }
 
+#music_ablum:before {
+    content: "专辑：";
+}
+
 #music_ablum span {
     display: block;
     white-space: nowrap;
@@ -596,6 +636,10 @@ a:hover, a:active, a:focus {
     width: 50%;
     height: inherit;
     float: left;
+}
+
+#music_art:before {
+    content: '歌手：';
 }
 
 #music_art span {
@@ -631,6 +675,9 @@ a:hover, a:active, a:focus {
     border-radius: 3px;
     background: #6446ff linear-gradient(-45deg, transparent 0px, transparent 10px, rgba(255, 255, 255, .3) 11px, rgba(255, 255, 255, .3) 20px, transparent 21px, transparent 30px, rgba(255, 255, 255, .3) 31px);
     background-size: 30px 30px;
+
+    -webkit-animation: warning-animation 1s infinite linear;
+    -o-animation: warning-animation 1s infinite linear;
     animation: warning-animation 1s infinite linear;
 }
 
@@ -687,15 +734,14 @@ a:hover, a:active, a:focus {
 
 @media (max-width: 480px) {
     #control {
-        top: inherit;
-        bottom: 40%;
+        position: fixed;
+        top: 55%;
+        bottom: 45%;
         width: 100%;
     }
 
-    #title {
-        margin: 0;
-        text-align: center;
-        font-size: 12px;
+    #header {
+        display: none;
     }
 
     #control .control_btn {
@@ -725,6 +771,8 @@ a:hover, a:active, a:focus {
     }
 
     #control .control_btn a:hover span {
+        -webkit-animation: none;
+        -o-animation: none;
         animation: none;
     }
 
@@ -747,16 +795,22 @@ a:hover, a:active, a:focus {
     }
 
     #control_ablum {
-        width: 160px;
-        height: 160px;
-        margin-top: -270px;
-        margin-left: -80px;
+        position: fixed;
+        top: 12%;
+        width: 30vh;
+        height: 30vh;
+        margin-top: 0;
+        margin-left: -15vh;
         border-radius: 0;
         box-shadow: 0 0 0 4px #f8f8f8 inset, 0 0 4px rgba(0, 0, 0, 0.4), 0 0 10px black inset;
-        animation: initial;
+        -webkit-animation: none;
+        -o-animation: none;
+        animation: none;
     }
 
     #songPanel {
+        height: 100vh;
+        width: 80%;
         background-color: rgba(51, 51, 51, .9);
     }
 
@@ -774,8 +828,8 @@ a:hover, a:active, a:focus {
         left: 0;
         right: 0;
         width: 80%;
-        height: 180px;
-        padding-top: 60px;
+        height: 20vh;
+        padding-top: 6vh;
         margin: auto;
         box-sizing: border-box;
     }
@@ -801,8 +855,10 @@ a:hover, a:active, a:focus {
 
     #music_ablum span,
     #music_art span {
-        display: inline;
+        display: inline-block;
         float: none;
+        margin: 0;
+        vertical-align: bottom;
     }
 
     #songdur {
@@ -815,7 +871,7 @@ a:hover, a:active, a:focus {
 
     #music_name {
         position: fixed;
-        top: 60px;
+        top: 2%;
         width: 100%;
         margin: 0;
     }

@@ -121,14 +121,19 @@ define(["DYUtils"], function (DYUtils) {
             trigger("pause");
         });
 
-        // 当音频播放进行时
+        // 当音频可以播放时
         DYUtils.bindEvent(player, "play", function () {
             trigger("play");
         });
 
+        // 当音频播放进行时
+        DYUtils.bindEvent(player, "playing", function () {
+            trigger("playing");
+        });
+
         // 当音频数据不可用时
-        DYUtils.bindEvent(player, "stalled", function () {
-            trigger("stalled");
+        DYUtils.bindEvent(player, "onemptied", function () {
+            trigger("onemptied");
             next();
         });
 
