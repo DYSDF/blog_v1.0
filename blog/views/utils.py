@@ -8,7 +8,7 @@ from blog.models import Cats, Tags, Comment, NavMenu
 
 def get_base_context(request, **kwargs):
     nav_menu = cache.get("nav_menu")
-    if nav_menu is None:
+    if nav_menu is None or len(nav_menu) == 0:
         nav_menu = NavMenu.objects.all()
         cache.set("nav_menu", nav_menu, 24 * 60 * 60)
 

@@ -10,8 +10,6 @@ define([], function () {
     function addEventListener(targetEv, eventType, callbackFn) {
         if (typeof targetEv === "string") targetEv = document.getElementById(targetEv);
         if (!targetEv) return false;
-
-        console.log(targetEv);
         
         if (targetEv.addEventListener) {
             targetEv.addEventListener(eventType, callbackFn);
