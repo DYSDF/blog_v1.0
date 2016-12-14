@@ -79,7 +79,6 @@ define([], function () {
             this.color = c || "red";
         }
 
-
         var context = canvasEl.getContext("2d"),
             canvasWidth,
             canvasHeight,
@@ -102,6 +101,10 @@ define([], function () {
 
         canvasEl.width = canvasWidth = canvasEl.offsetWidth * scale;
         canvasEl.height = canvasHeight = canvasEl.offsetHeight * scale;
+        bindEvent(window, "resize", function () {
+            canvasEl.width = canvasWidth = canvasEl.offsetWidth * scale;
+            canvasEl.height = canvasHeight = canvasEl.offsetHeight * scale;
+        });
 
         function setMousePoint(e) {
             mousePoint = {

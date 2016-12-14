@@ -47,35 +47,31 @@ require(['jquery'], function ($) {
 });
 
 // 响应式菜单点击以外关闭
-require(['jquery'], function () {
-    $("#header_nav").on("click", function (e) {
-        e.stopPropagation();
-    });
-
-    $("body").on("click", function () {
-        if ($("#nav_menu_checkbox").get(0).checked) {
-            $("#nav_menu_checkbox").get(0).checked = false;
+require(['DYUtils'], function (DYUtils) {
+    DYUtils.bindEvent(document.getElementById("header_nav"), "click", DYUtils.stopBubble);
+    DYUtils.bindEvent(document, "click", function (e) {
+        if (document.getElementById("nav_menu_checkbox").checked) {
+            document.getElementById("nav_menu_checkbox").checked = false;
+            DYUtils.stopBubble(e);
             return false;
         }
-    })
+    });
 });
 
 // 全局快速滚动插件
-require(["FastScroll"], function (FastScroll) {
+require(["DYUtils", "FastScroll"], function (DYUtils, FastScroll) {
     var fastScroll = new FastScroll(document.getElementsByClassName("body")[0]);
     fastScroll.onScroll = function (scrollTop) {
-        var ev = document.getElementById("go_to_top"),
-            className = ev.className;
+        var ev = document.getElementById("go_to_top");
         if (scrollTop > window.screen.availHeight / 2) {
-            ev.className = className.replace(new RegExp("show"), " ").trim() + " show";
+            DYUtils.addClassName(ev, "show");
         } else {
-            ev.className = className.replace(new RegExp("show"), " ").trim();
+            DYUtils.removeClassName(ev, "show");
         }
     };
-    document.addEventListener("click", function (e) {
+    DYUtils.bindEvent(document, "click", function (e) {
         e = e || window.event;
-        if (e.target.id != "go_to_top") return false;
-        fastScroll.goTop();
+        if (e.target.id == "go_to_top") fastScroll.goTop();
     })
 });
 
