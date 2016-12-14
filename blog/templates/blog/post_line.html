@@ -14,7 +14,7 @@
                 <div>{{ yItem.0 }}年<i class="icon icon-caret-right"></i></div>
                 <ul>
                     {% for mItem in yItem.1 %}
-                    <li data-mouth="{{ mItem.0 }}">{{ mItem.0 }}月</li>
+                    <li data-year="{{ yItem.0 }}" data-mouth="{{ mItem.0 }}">{{ mItem.0 }}月</li>
                     {% endfor %}
                 </ul>
             </li>

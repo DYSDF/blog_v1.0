@@ -20,10 +20,6 @@ require.config({
 
         // 滚动条进度插件
         "ScrollProgressBar": "common/js/ScrollProgressBar",
-
-        // post_line页面工具集
-        "post_line_util": "common/js/post_line_util",
-
         
         // 代码高亮方案
         // "shCore": "highlighter/scripts/shCore",

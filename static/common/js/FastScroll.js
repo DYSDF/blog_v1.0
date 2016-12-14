@@ -49,8 +49,11 @@ define([], function () {
             FastScroll.prototype.goTo = function (t) {
                 targetScroll = t > scrollMax ? scrollMax : (t < 0 ? 0 : t);
                 requestAnimationFrame(function () {
-                    step = ( targetScroll * 1 - this.target.scrollTop ) / 5;
-                    this.target.scrollTop += (Math.abs(step) < 1 ? Math.abs(step) / step : step);
+                    var distance = targetScroll * 1 - this.target.scrollTop;
+                    if (parseInt(distance) == 0) return;
+                    var step = distance / 5;
+                    if (Math.abs(step) < 1) step = Math.abs(step) / step;
+                    this.target.scrollTop += step;
                     if (this.target.scrollTop != targetScroll) {
                         requestAnimationFrame(arguments.callee.bind(this));
                     } else {

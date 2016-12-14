@@ -412,6 +412,8 @@ blockquote p {
     width: 80px;
     float: left;
     text-align: right;
+
+    -webkit-transform: translateZ(0);
 }
 
 #time_line ul {
@@ -523,6 +525,8 @@ blockquote p {
     line-height: 40px;
     top: 0;
     background-color: rgb(253, 253, 253);
+
+    -webkit-transform: translateZ(0);
 }
 
 /*博文详情页样式*/
