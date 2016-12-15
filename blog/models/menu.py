@@ -6,9 +6,17 @@ from django.db import models
 
 
 class NavMenu(models.Model):
+    target_choices = [
+        ("_self", "默认"),
+        ("_blank", "新窗口"),
+        ("_parent", "父框架"),
+        ("_top", "顶层框架"),
+    ]
+
     parent = models.ForeignKey('self', null=True, blank=True, related_name=u'childMenu', verbose_name=u"父级菜单")
     title = models.CharField(max_length=20, verbose_name=u'菜单名称')
     href = models.CharField(max_length=200, verbose_name=u'链接')
+    target = models.CharField(verbose_name=u'打开方式', max_length=20, choices=target_choices, default="_self")
     site = models.ManyToManyField(Site, verbose_name=u'应用站点')
     create_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name=u"创建时间")
     create_user = models.ForeignKey('accounts.User', verbose_name=u'创建人', null=True, blank=True,

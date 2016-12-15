@@ -12,7 +12,7 @@ class Authors(models.Model):
         (2, "未知"),
     ]
     name = models.CharField(default=u"断崖上的风", max_length=100, verbose_name=u'作者')
-    sex = models.IntegerField(verbose_name=u'性别', choices=gender_choices)
+    sex = models.IntegerField(verbose_name=u'性别', choices=gender_choices, default=2)
 
     class Meta:
         verbose_name_plural = u'作者列表'

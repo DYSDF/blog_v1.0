@@ -49,7 +49,7 @@
                     <label id="nav_menu_label" for="nav_menu_checkbox"><i class="icon icon-reorder"></i></label>
                     <ul class="nav_menu">
                         {% for menu in nav_menu %}
-                            <li><a href="{{ menu.href }}">{{ menu.title }}</a></li>
+                            <li><a href="{{ menu.href }}" title="{{ menu.title }}" target="{{ menu.target }}">{{ menu.title }}</a></li>
                         {% endfor %}
                     </ul>
                     <form action="/search" id="search">
