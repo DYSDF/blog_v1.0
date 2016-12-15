@@ -89,3 +89,25 @@ require(["jquery", "SpiderWeb"], function ($, SpiderWeb) {
         spider.start();
     });
 });
+
+// 图片炸裂效果
+require(["jquery", "PictureBurst", "DYUtils"], function ($, PictureBurst, DYUtils) {
+    $(function () {
+        var isVisited = DYUtils.getCookie("hasVisited");
+        if (!isVisited) {
+            var img = document.getElementById("header_img");
+            var pictureBurst = PictureBurst(img, {
+                countX: 40,
+                countY: 5,
+                rotate: 0,
+                onEnd: function () {
+                    img.style.opacity = "";
+                }
+            });
+            img.style.opacity = "0";
+            pictureBurst.gather();
+
+            DYUtils.setCookie("hasVisited", true)
+        }
+    });
+});

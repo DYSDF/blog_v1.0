@@ -14,19 +14,19 @@
 
     {#样式表加载#}
     {# 基础样式表#}
-    <link rel="stylesheet" type="text/css" href={% static 'common/css/reset.css' %}>
-    <link rel="stylesheet" type="text/css" href={% static 'blog/css/style.css' %}>
-    <link rel="stylesheet" type="text/css" href={% static 'blog/css/font-awesome.min.css' %}>
-    <link rel="stylesheet" type="text/css" href={% static 'blog/css/animation.css' %}>
+    <link rel="stylesheet" type="text/css" href="{% static 'common/css/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/animation.css' %}">
     {#额外样式表#}
     {% block styleSheet %}{% endblock %}
 
     {#脚本列表加载#}
     {#基础脚本#}
-    <script type="text/javascript" src={% static 'modernizr/modernizr.js' %}></script>
-    <script type="text/javascript" src={% static 'requireJS/require.js' %}></script>
-    <script type="text/javascript" src={% static 'requireJS/require_config.js' %}></script>
-    <script type="text/javascript" src={% static 'blog/js/base.js' %}></script>
+    <script type="text/javascript" src="{% static 'modernizr/modernizr.js' %}"></script>
+    <script type="text/javascript" src="{% static 'requireJS/require.js' %}"></script>
+    <script type="text/javascript" src="{% static 'requireJS/require_config.js' %}"></script>
+    <script type="text/javascript" src="{% static 'blog/js/base.js' %}"></script>
     {#额外脚本#}
     {% block script %}{% endblock %}
 
@@ -38,6 +38,7 @@
         <div id="wrap">
             <header id="header">
                 <div id="header_image">
+                    <img id="header_img" src="{% static 'blog/images/header_bg.jpg' %}" title="欢迎访问本博客">
                     <div id="header_logo">
                         <span class="site_name"><a href="/">断崖上の风's 部落格</a></span>
                         <span class="sub-title">不会WEB技术的机械工程师不是好文艺青年</span>

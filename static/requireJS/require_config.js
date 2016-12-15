@@ -35,6 +35,10 @@ require.config({
         // TextArea高度自适应插件
         "autoTextAreaHeight": "common/js/autoTextareaHeight",
 
+
+        // 基础效果计算库
+        "Tween": "common/js/Tween",
+
         // 快速滚动插件
         "FastScroll": "common/js/FastScroll",
 
@@ -45,6 +49,9 @@ require.config({
         "ScrollText": "common/js/ScrollText",
         
         // 蜘蛛网效果
-        "SpiderWeb": "common/js/SpiderWebPlugin"
+        "SpiderWeb": "common/js/SpiderWebPlugin",
+
+        // 图片炸裂效果
+        "PictureBurst": "common/js/PictureBurst"
     }
 });
