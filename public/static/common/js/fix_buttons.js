@@ -1,0 +1,1 @@
+define(["DYUtils"],function(a){function b(e,f,c,d){if(typeof e==="string"){e=document.querySelector(e)}if(typeof c==="string"){c=document.querySelector(c)}a.bindEvent(e,"scroll",function(){var g=c.getBoundingClientRect().top;if(d>=g){f.style.position="fixed";f.style.top=d+"px"}else{f.style.position="initial";f.style.top="0"}})}return{init:b}});

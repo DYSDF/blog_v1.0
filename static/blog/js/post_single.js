@@ -2,6 +2,7 @@
  * Created by 断崖 on 2016/6/28.
  */
 
+
 // 动态加载代码高亮脚本
 require(["jquery", "highlight"], function ($) {
     
@@ -14,7 +15,7 @@ require(["jquery", "highlight"], function ($) {
 
         window.hljs.highlightBlock(ev);
     });
-    
+
     // // synxhighlight
     // var shType = $("pre").map(function () {
     //     console.log($(this).attr("class"));

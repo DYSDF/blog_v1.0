@@ -320,6 +320,7 @@ blockquote p {
 }
 
 #body .more a:hover {
+    border: 1px solid #169fe6;
     background-color: #169fe6;
     color: #fff;
 }

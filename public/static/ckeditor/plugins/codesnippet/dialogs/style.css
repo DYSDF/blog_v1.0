@@ -1,0 +1,7 @@
+/*label styling */
+
+.cke_ace * {
+    font-family : 'Monaco', 'Menlo', 'Ubuntu Mono', 'Droid Sans Mono', 'Consolas', monospace;
+    font-size   : 14px;
+    color: #fff;
+}
