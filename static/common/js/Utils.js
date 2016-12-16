@@ -3,7 +3,20 @@
  */
 
 define([], function () {
+    // 基本方法
     var DYUtils = {
+        // 浏览器检测
+        browser: {
+            ie: function () {
+                var b = document.createElement('b');
+                for (var i = 6; i < 20; i++) {
+                    b.innerHTML += '<!--[if IE ' + i + ']><i></i><![endif]-->';
+                }
+                document.body.appendChild(b);
+                return b.getElementsByTagName('i').length;
+            }
+        },
+
         // JS 设计模式
         // 转换成object
         toObject: function (str) {
@@ -58,6 +71,22 @@ define([], function () {
         },
 
         // DOM 操作类
+        // CSS选择器先用别人的，后期自己写
+        querySelector: function (cssPath) {
+            return this.querySelectors(cssPath)[0];
+        },
+        querySelectors: (function () {
+            if (document.querySelectorAll) {
+                return function (cssPath) {
+                    if (typeof cssPath != "string") return;
+                    return document.querySelectorAll(cssPath);
+                };
+            } else {
+                require(["QuerySelector"], function (QuerySelector) {
+                    DYUtils.querySelectors = QuerySelector;
+                });
+            }
+        })(),
         hasClassName: function (target, className) {
             if (target.className) {
                 return target.className.split(" ").some(function (item) {
@@ -180,9 +209,19 @@ define([], function () {
             }
         },
         setCookie: function (key, value, age, path) {
-            var date = new Date();
-            date.setTime(Date.now() + age * 1000);
-            document.cookie = key + "=" + value + ";expires=" + date.toUTCString() + ";path=" + path;
+            var cookie = [];
+            if (value != null && value != undefined) {
+                cookie.push(key + "=" + value);
+            }
+            if (age != null && age != undefined) {
+                var date = new Date();
+                date.setTime(Date.now() + age * 1000);
+                cookie.push("expires=" + date.toUTCString());
+            }
+            if (path != null && path != undefined) {
+                cookie.push("path=" + path);
+            }
+            document.cookie = cookie.join(";");
         },
         delCookie: function (key) {
             document.cookie = key + "=;expires=" + new Date().toUTCString();
@@ -248,6 +287,7 @@ define([], function () {
             xhr.open(method, url, async);
 
             // 改写请求头
+            xhr.setRequestHeader('Request-type', 'ajax');
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
             beforeSend.call(this, xhr);
 
@@ -267,9 +307,72 @@ define([], function () {
                 };
             requestAnimation(fn);
         }
+
     };
 
-    if (!window.DYUtils) window.DYUtils = DYUtils;
+    // 增加方法
+    DYUtils.DOMReady = (function () {
+        var isDOMReady = false;
+        var domReadyMonitorId;
+        var domReadyMonitorRunTimes = 0;
+        var readyFuncArray = [];
 
+        function DOMReadyMonitor() {
+            domReadyMonitorRunTimes++;
+            //对于ie6,7,8浏览器, 使用doScroll判断Dom Ready
+            if (DYUtils.browser.ie() && DYUtils.browser.ie() < 9) {
+                try {
+                    document.documentElement.doScroll("left");
+                    DOMContentLoadedHandler();
+                } catch (e) {
+                }
+            }
+            else if (document.readyState === "complete") {
+                DOMContentLoadedHandler();
+            }
+            //对于某些特殊页面, 如果readyState永远不能为complete, 设置了一个最大运行时间5分钟. 超过了最大运行时间则销毁定时器.
+            else {
+                if (domReadyMonitorRunTimes > 300000) {
+                    if (domReadyMonitorId) {
+                        DOMContentLoadedHandler();
+                    }
+                }
+            }
+        }
+
+        function DOMContentLoadedHandler() {
+            if (isDOMReady) return;
+            try {
+                if (readyFuncArray && readyFuncArray.length) {
+                    readyFuncArray.forEach(function (item) {
+                        if (item && item.func && !item.done) {
+                            if (item.delay) {
+                                item.done = true;
+                                window.setTimeout(item.func, item.delay);
+                            } else {
+                                item.done = true;
+                                item.func();
+                            }
+                        }
+                    });
+                }
+            } catch (ex) {
+                throw ex;
+            }
+            isDOMReady = true;
+            window.clearInterval(domReadyMonitorId);
+        }
+
+        //启动DOMReady监控进程
+        domReadyMonitorId = window.setInterval(DOMReadyMonitor, 50);
+        DYUtils.bindEvent(document, "DOMContentLoaded", DOMContentLoadedHandler);
+        DYUtils.bindEvent(window, "load", DOMContentLoadedHandler, false);
+
+        return function (callback, delay) {
+            readyFuncArray.push({func: callback, delay: delay, done: false});
+        };
+    })();
+
+    if (!window.DYUtils) window.DYUtils = DYUtils;
     return DYUtils;
 });

@@ -2,7 +2,6 @@
  * Created by 断崖上的风 on 2016/7/29.
  */
 
-
 // 导航栏高亮
 // 逻辑就是把地址当成目录，从里往外迭代，当迭代出的目录路径与某一个菜单href一致，则停止迭代，高亮菜单
 require(['jquery'], function ($) {
@@ -19,7 +18,7 @@ require(['jquery'], function ($) {
         if (menuList.length > 0) {
             var target = null;
             var total = null;
-            if (menuList.eq(0).children("a").attr("href").startsWith("http")) {
+            if (menuList.eq(0).children("a").attr("href").indexOf("http") === 0) {
                 total = location_href;
             } else {
                 total = location_pathname;
@@ -77,8 +76,8 @@ require(["DYUtils", "FastScroll"], function (DYUtils, FastScroll) {
 
 
 // 蜘蛛网效果
-require(["jquery", "SpiderWeb"], function ($, SpiderWeb) {
-    $(function () {
+require(["DYUtils", "SpiderWeb"], function (DYUtils, SpiderWeb) {
+    DYUtils.DOMReady(function () {
         var spider = new SpiderWeb(document.getElementById("background_canvas"), {
             radius: 2.5,
             color: "#4c4c4c",
@@ -87,12 +86,12 @@ require(["jquery", "SpiderWeb"], function ($, SpiderWeb) {
             maxDistance: 200
         });
         spider.start();
-    });
+    })
 });
 
 // 图片炸裂效果
-require(["jquery", "PictureBurst", "DYUtils"], function ($, PictureBurst, DYUtils) {
-    $(function () {
+require(["PictureBurst", "DYUtils"], function (PictureBurst, DYUtils) {
+    DYUtils.DOMReady(function () {
         var isVisited = DYUtils.getCookie("hasVisited");
         if (!isVisited) {
             var img = document.getElementById("header_img");
@@ -109,5 +108,5 @@ require(["jquery", "PictureBurst", "DYUtils"], function ($, PictureBurst, DYUtil
 
             DYUtils.setCookie("hasVisited", true)
         }
-    });
+    })
 });

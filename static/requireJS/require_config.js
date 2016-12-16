@@ -10,6 +10,7 @@ require.config({
     paths: {
         // 自定义工具集
         DYUtils: "common/js/Utils",
+        QuerySelector: "common/js/QuerySelector",
 
         // jQuery
         "jquery": "jQuery/jquery.min",

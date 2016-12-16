@@ -45,7 +45,7 @@ require(["jquery", "highlight"], function ($) {
 
 
 // 评论框脚本
-require(["jquery"], function ($) {
+require(["jquery","DYUtils"], function ($, DYUtils) {
     function showTips(str, fn) {
         $("#comment_form_tips").text(str)
             .animate({ "max-height": "80px"}, 600);
@@ -72,15 +72,16 @@ require(["jquery"], function ($) {
     // 提交时运行函数
     $("#comment_form").on("submit", function (e) {
         var data = $("#comment_form").serialize();
-        $.ajax({
+        DYUtils.ajax({
             url: $("#comment_form").attr("action"),
             method: "post",
             data: data,
             success: function (data) {
+                data = JSON.parse(data);
                 if(data.success){
                     $("#comment_form").get(0).reset();
                     showTips("评论成功！感谢回复~", function () {
-                        window.location.reload();
+                        // window.location.reload();
                     });
                 } else {
                     showTips(data.msg);
@@ -94,7 +95,7 @@ require(["jquery"], function ($) {
     });
 
     // Ctrl + Enter 提交表单
-    $(document).on("keyup", function (e) {
+    DYUtils.bindEvent(document, "keyup", function (e) {
         if(e.ctrlKey && e.keyCode == 13){
             $("#comment_form").get(0).scrollIntoView(true);
             $("#comment_form button").trigger("click");

@@ -17,7 +17,7 @@ define(["DYUtils"], function (DYUtils) {
                 targetEv.style.position = "fixed";
                 targetEv.style.top = top + "px";
             } else {
-                targetEv.style.position = "initial";
+                targetEv.style.position = "static";
                 targetEv.style.top = "0";
             }
         });
