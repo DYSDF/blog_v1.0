@@ -310,7 +310,7 @@ define([], function () {
 
     };
 
-    // 增加方法
+    // 增强方法
     DYUtils.DOMReady = (function () {
         var isDOMReady = false;
         var domReadyMonitorId;
@@ -327,7 +327,7 @@ define([], function () {
                 } catch (e) {
                 }
             }
-            else if (document.readyState === "complete") {
+            else if (document.readyState === "complete" || document.readyState === "interactive") {
                 DOMContentLoadedHandler();
             }
             //对于某些特殊页面, 如果readyState永远不能为complete, 设置了一个最大运行时间5分钟. 超过了最大运行时间则销毁定时器.
