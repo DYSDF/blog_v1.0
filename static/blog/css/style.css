@@ -400,6 +400,34 @@ blockquote p {
     margin-right: 4px;
 }
 
+/*标签列表*/
+#tags_widget .widget_list {
+    display: -webkit-box;
+    -webkit-box-pack: justify;
+    -webkit-box-lines: multiple;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    border-left: 1px solid #e3e3e3;
+}
+
+#tags_widget .widget_list li {
+    -webkit-box-flex: 1.0;
+    flex-grow: 1.0;
+    text-align: center;
+}
+
+#tags_widget .widget_list li a {
+    border-left: none;
+    border-top: none;
+}
+
+#tags_widget .white_space {
+    height: 0;
+    width: 25%;
+}
+
 /*页脚样式*/
 #footer {
     background: #3C3C3C;

@@ -1,6 +1,6 @@
 {#文章归档模块#}
 
-<section class="widget">
+<section id="tags_widget" class="widget">
     <h3 class="widget_title">文章标签</h3>
     <div class="widget_content">
         <ul class="widget_list">
@@ -9,6 +9,11 @@
                     <li><a href="/search/tag/{{ tag.id }}">{{ tag.tag }}({{ tag.count }})</a></li>
                 {% endifnotequal %}
             {% endfor %}
+            <li class="white_space"></li>
+            <li class="white_space"></li>
+            <li class="white_space"></li>
+            <li class="white_space"></li>
+            <li class="white_space"></li>
         </ul>
     </div>
 </section>
