@@ -86,7 +86,7 @@ require(["DYUtils", "SpiderWeb"], function (DYUtils, SpiderWeb) {
             maxDistance: 200
         });
         spider.start();
-    })
+    }, 1000)
 });
 
 // 图片炸裂效果
