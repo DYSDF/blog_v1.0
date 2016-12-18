@@ -93,19 +93,20 @@ blockquote p {
     position: relative;
     color: #fff;
     margin: 40px 0 0 20px;
+    text-shadow: 1px 1px 4px black;
     z-index: 10000;
 }
 
 #header_logo .site_name {
-    font-size: 30px;
     display: block;
+    font-size: 30px;
 }
 
 #header_logo .site_name a {
     color: #fff;
 }
 
-#header_logo .sub-title {
+#header_logo .sub_title {
     font-size: 16px;
     line-height: 36px;
 }

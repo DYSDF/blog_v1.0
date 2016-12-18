@@ -86,7 +86,7 @@ require(["DYUtils", "SpiderWeb"], function (DYUtils, SpiderWeb) {
             maxDistance: 200
         });
         spider.start();
-    }, 1000)
+    })
 });
 
 // 图片炸裂效果
@@ -106,7 +106,17 @@ require(["PictureBurst", "DYUtils"], function (PictureBurst, DYUtils) {
             img.style.opacity = "0";
             pictureBurst.gather();
 
-            DYUtils.setCookie("hasVisited", true)
+            DYUtils.setCookie("hasVisited", true, 30 * 60)
         }
     })
 });
+
+// 请求 hitokoto
+require(["DYUtils"], function (DYUtils) {
+    DYUtils.ajax({
+        url: "/hitokoto?c=a&text=1",
+        success: function (res) {
+            DYUtils.querySelector("#header_logo .sub_title").innerText = res;
+        }
+    })
+})
