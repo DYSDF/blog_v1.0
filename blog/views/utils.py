@@ -2,15 +2,30 @@
 from django.db.models import Count
 from django.template import loader
 from django.core.cache import cache
+from django.contrib.sites.shortcuts import get_current_site
+from blog.models import Cats, Tags, Comment, Settings
 
-from blog.models import Cats, Tags, Comment, NavMenu
+from siteRoot import settings
 
 
 def get_base_context(request, **kwargs):
-    nav_menu = cache.get("nav_menu")
+    site_id = get_current_site(request).id
+    site_settings = Settings.objects.filter(sites__id=site_id)
+
+    nav_menu = cache.get("nav_menu_" + str(site_id))
     if nav_menu is None or len(nav_menu) == 0:
-        nav_menu = NavMenu.objects.all()
-        cache.set("nav_menu", nav_menu, 24 * 60 * 60)
+        nav_menu = []
+        if len(site_settings) > 0:
+            nav_menu = site_settings[0].nav_menu.all()
+            cache.set("nav_menu_" + str(site_id), nav_menu, 24 * 60 * 60)
+
+    head_image = cache.get("head_image_" + str(site_id))
+    if head_image is None or head_image == "":
+        if len(site_settings) > 0:
+            head_image_obj = site_settings[0].head_img
+            if head_image_obj.name != "":
+                head_image = head_image_obj.url
+                cache.set("head_image_" + str(site_id), head_image, 24 * 60 * 60)
 
     return {
         # 基础部分
@@ -27,6 +42,7 @@ def get_base_context(request, **kwargs):
         "tag_model": get_tags_info(request.user),  # 所有标签数据
         "comments_model": get_comments_info(request.user)[:10],  # 所有评论数据
         'nav_menu': nav_menu,
+        "head_image": head_image
     }
 
 

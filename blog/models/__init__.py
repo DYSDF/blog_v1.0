@@ -18,5 +18,5 @@ from comments import *
 # 导入留言 model
 from messages import *
 
-# 导入菜单 model
-from menu import *
+# 导入设置 model
+from settings import *
