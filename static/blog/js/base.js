@@ -114,9 +114,10 @@ require(["PictureBurst", "DYUtils"], function (PictureBurst, DYUtils) {
 // 请求 hitokoto
 require(["DYUtils"], function (DYUtils) {
     DYUtils.ajax({
-        url: "/hitokoto?c=a&text=1",
+        url: "/hitokoto?c=a",
         success: function (res) {
-            DYUtils.querySelector("#header_logo .sub_title").innerText = res;
+            json = JSON.parse(res);
+            DYUtils.querySelector("#header_logo .sub_title").innerText = "『" + json.hitokoto + "』 —— 《" + json.from + "》";
         }
     })
 })
