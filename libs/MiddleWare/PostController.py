@@ -72,7 +72,6 @@ class PostController(object):
                         return HttpResponse("<script>alert('" + msg + "')</script>")
 
                 else:
-
                     if current_time - last_post_time < min_post_interval:
                         post_time_count += (min_post_interval - current_time + last_post_time) * 0.1
                     else:

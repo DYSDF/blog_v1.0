@@ -198,10 +198,10 @@ STATICFILES_DIRS = [
 ]
 
 # Media 文件处理
-# if debug:
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# else:
-#     MEDIA_ROOT = "http://duanyablog-media.sinaapp.com"  # 这里就写你的应用名和domain
+if DEBUG:
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+else:
+    MEDIA_ROOT = "/media"
 # if debug:
 MEDIA_URL = '/media/'
 # else:
