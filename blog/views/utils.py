@@ -42,7 +42,8 @@ def get_base_context(request, **kwargs):
         "tag_model": get_tags_info(request.user),  # 所有标签数据
         "comments_model": get_comments_info(request.user)[:10],  # 所有评论数据
         'nav_menu': nav_menu,
-        "head_image": head_image
+        "head_image": head_image,
+        "hasVisited": "hasVisited" in request.COOKIES
     }
 
 

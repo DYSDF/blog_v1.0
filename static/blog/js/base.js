@@ -86,27 +86,18 @@ require(["DYUtils", "SpiderWeb"], function (DYUtils, SpiderWeb) {
             maxDistance: 200
         });
         spider.start();
-    })
+    }, 5000)
 });
 
-// 图片炸裂效果
-require(["PictureBurst", "DYUtils"], function (PictureBurst, DYUtils) {
+// 头图动态效果
+require(["DYUtils"], function (DYUtils) {
     DYUtils.DOMReady(function () {
-        var isVisited = DYUtils.getCookie("hasVisited");
-        if (!isVisited) {
-            var img = document.getElementById("header_img");
-            var pictureBurst = PictureBurst(img, {
-                countX: 40,
-                countY: 5,
-                rotate: 0,
-                onEnd: function () {
-                    img.style.opacity = "";
-                }
-            });
-            img.style.opacity = "0";
-            pictureBurst.gather();
-
-            DYUtils.setCookie("hasVisited", true, 30 * 60)
+        var hasVisited = DYUtils.getCookie("hasVisited");
+        if (!hasVisited) {
+            setTimeout(function () {
+                DYUtils.removeClassName(DYUtils.querySelector("#container"), "init");
+            }, 2000)
+            DYUtils.setCookie("hasVisited", true, 30 * 60);
         }
     })
 });
@@ -118,7 +109,7 @@ require(["DYUtils"], function (DYUtils) {
         success: function (res) {
             json = JSON.parse(res);
             DYUtils.querySelector("#header_logo .sub_title").innerText = "『" + json.hitokoto + "』";
-            DYUtils.querySelector("#header_logo .sub_title").title = "——《" + json.from + "》";
+            DYUtils.querySelector("#header_logo .sub_title").title = "《" + json.from + "》";
         }
     })
 })

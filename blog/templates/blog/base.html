@@ -33,16 +33,19 @@
 </head>
 <body>
 <div class="body">
-    <div id="container">
+    <div id="container" class="{{ hasVisited | default:'init' }}">
         <canvas id="background_canvas"></canvas>
         <div id="wrap">
             <header id="header">
-                <img id="header_img" src="{{ head_image | default:'/static/blog/images/header_bg.jpg' }}"
-                     title="欢迎访问本博客">
-                <div id="header_image">
+                <div id="header_image"
+                     style="background-image: url({{ head_image | default:'/static/blog/images/header_bg.jpg' }})">
+                    {#                    <img id="header_img" src="{{ head_image | default:'/static/blog/images/header_bg.jpg' }}"#}
+                    {#                         title="欢迎访问本博客">#}
                     <div id="header_logo">
-                        <span class="site_name"><a href="/">断崖上の风's 部落格</a></span>
-                        <span class="sub_title">不会WEB技术的机械工程师不是好文艺青年</span>
+                        <div id="logo_content">
+                            <span class="site_name"><a href="/">断崖上の风's 部落格</a></span>
+                            <span class="sub_title">不会WEB技术的机械工程师不是好文艺青年</span>
+                        </div>
                     </div>
                 </div>
                 <div id="header_nav">

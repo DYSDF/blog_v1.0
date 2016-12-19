@@ -58,8 +58,6 @@ blockquote p {
 /*header基本样式*/
 #header {
     position: relative;
-    width: inherit;
-    border: 0;
     overflow: hidden;
 }
 
@@ -77,12 +75,9 @@ blockquote p {
 
 /*头部图片背景*/
 #header_image {
-    display: table-cell;
     position: relative;
-    width: inherit;
-    max-width: 1100px;
-    padding: 37px 0;
-    vertical-align: middle;
+    background-position: center;
+    background-size: cover;
 }
 
 #header_img {
@@ -90,6 +85,8 @@ blockquote p {
     top: 50%;
     left: 0;
     width: 100%;
+    z-index: -1;
+
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
@@ -98,11 +95,26 @@ blockquote p {
 }
 
 #header_logo {
-    position: relative;
-    padding-left: 20px;
+    display: table-cell;
+    height: 150px;
+    min-width: 270px;
+    padding: 37px 0 37px 40px;
     color: #fff;
+    text-align: center;
+    vertical-align: middle;
     text-shadow: 1px 1px 4px black;
-    z-index: 10000;
+    box-sizing: border-box;
+
+    -webkit-transition: all 800ms ease-in-out;
+    -moz-transition: all 800ms ease-in-out;
+    -ms-transition: all 800ms ease-in-out;
+    -o-transition: all 800ms ease-in-out;
+    transition: all 800ms ease-in-out;
+}
+
+#logo_content {
+    display: inline-block;
+    text-align: left;
 }
 
 #header_logo .site_name {
@@ -117,6 +129,30 @@ blockquote p {
 #header_logo .sub_title {
     font-size: 16px;
     line-height: 36px;
+}
+
+#header_logo .site_name,
+#header_logo .sub_title {
+    -webkit-transition: font-size 800ms ease-in-out;
+    -moz-transition: font-size 800ms ease-in-out;
+    -ms-transition: font-size 800ms ease-in-out;
+    -o-transition: font-size 800ms ease-in-out;
+    transition: font-size 800ms ease-in-out;
+}
+
+/*初始化头部样式*/
+.init #header_logo {
+    height: 580px;
+    min-width: 1100px;
+    text-shadow: 0 0 8px black;
+}
+
+.init #header_logo .site_name {
+    font-size: 40px;
+}
+
+.init #header_logo .sub_title {
+    font-size: 20px;
 }
 
 /*头部导航栏*/
