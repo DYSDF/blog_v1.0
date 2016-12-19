@@ -117,7 +117,8 @@ require(["DYUtils"], function (DYUtils) {
         url: "/hitokoto?c=a",
         success: function (res) {
             json = JSON.parse(res);
-            DYUtils.querySelector("#header_logo .sub_title").innerText = "『" + json.hitokoto + "』 —— 《" + json.from + "》";
+            DYUtils.querySelector("#header_logo .sub_title").innerText = "『" + json.hitokoto + "』";
+            DYUtils.querySelector("#header_logo .sub_title").title = "——《" + json.from + "》";
         }
     })
 })

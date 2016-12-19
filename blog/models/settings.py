@@ -14,7 +14,7 @@ class Settings(models.Model):
     sites = models.OneToOneField(Site, verbose_name=u'投放站点')
     head_img = models.ImageField(verbose_name=u'文章头图', blank=True,
                                  upload_to='./blog/headImg/%s/' % time.strftime('%Y-%m-%d'),
-                                 storage=ImageStorage(re_size=(1100, 150)))
+                                 storage=ImageStorage(re_size=(1100, None)))
     enable = models.BooleanField(default=True, verbose_name=u'是否启用')
     create_time = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True)
     update_time = models.DateTimeField(verbose_name=u'修改时间', auto_now=True)
