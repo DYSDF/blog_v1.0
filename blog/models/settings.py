@@ -1,8 +1,11 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 import time
 
 from django.contrib import admin
 from django.contrib.sites.models import Site
+from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
@@ -10,22 +13,23 @@ from django.dispatch import receiver
 from libs.FileManage.FileStorage import ImageStorage
 
 
+@python_2_unicode_compatible
 class Settings(models.Model):
-    sites = models.OneToOneField(Site, verbose_name=u'投放站点')
-    head_img = models.ImageField(verbose_name=u'文章头图', blank=True,
+    sites = models.OneToOneField(Site, verbose_name='投放站点')
+    head_img = models.ImageField(verbose_name='文章头图', blank=True,
                                  upload_to='./blog/headImg/%s/' % time.strftime('%Y-%m-%d'),
                                  storage=ImageStorage(re_size=(1100, None)))
-    enable = models.BooleanField(default=True, verbose_name=u'是否启用')
-    create_time = models.DateTimeField(verbose_name=u'创建时间', auto_now_add=True)
-    update_time = models.DateTimeField(verbose_name=u'修改时间', auto_now=True)
+    enable = models.BooleanField(default=True, verbose_name='是否启用')
+    create_time = models.DateTimeField(verbose_name='创建时间', auto_now_add=True)
+    update_time = models.DateTimeField(verbose_name='修改时间', auto_now=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % self.sites
 
     class Meta:
         ordering = ['-create_time']
-        verbose_name = u'网站设置'
-        verbose_name_plural = u'网站设置列表'
+        verbose_name = '网站设置'
+        verbose_name_plural = '网站设置列表'
 
 
 # 博文保存前处理
@@ -50,6 +54,7 @@ def after_content_delete(sender, **kwargs):
         new_object.head_img.storage.delete(new_object.head_img.name)
 
 
+@python_2_unicode_compatible
 class NavMenu(models.Model):
     target_choices = [
         ("_self", "默认"),
@@ -59,23 +64,23 @@ class NavMenu(models.Model):
     ]
 
     apply = models.ForeignKey("Settings", related_name=u'nav_menu')
-    parent = models.ForeignKey('self', null=True, blank=True, related_name=u'childMenu', verbose_name=u"父级菜单")
-    title = models.CharField(max_length=20, verbose_name=u'菜单名称')
-    href = models.CharField(max_length=200, verbose_name=u'链接')
-    target = models.CharField(verbose_name=u'打开方式', max_length=20, choices=target_choices, default="_self")
-    create_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name=u"创建时间")
-    create_user = models.ForeignKey('accounts.User', verbose_name=u'创建人', null=True, blank=True,
-                                    related_name=u'create_menu', editable=False)
-    update_time = models.DateTimeField(auto_now=True, null=True, verbose_name=u'修改时间')
-    update_user = models.ForeignKey('accounts.User', null=True, blank=True, verbose_name=u'修改人',
-                                    related_name=u'update_menu', editable=False)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name=u'childMenu', verbose_name="父级菜单")
+    title = models.CharField(max_length=20, verbose_name='菜单名称')
+    href = models.CharField(max_length=200, verbose_name='链接')
+    target = models.CharField(verbose_name='打开方式', max_length=20, choices=target_choices, default="_self")
+    create_time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="创建时间")
+    create_user = models.ForeignKey('accounts.User', verbose_name='创建人', null=True, blank=True,
+                                    related_name='create_menu', editable=False)
+    update_time = models.DateTimeField(auto_now=True, null=True, verbose_name='修改时间')
+    update_user = models.ForeignKey('accounts.User', null=True, blank=True, verbose_name='修改人',
+                                    related_name='update_menu', editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s" % self.title
 
     class Meta:
-        verbose_name_plural = u'菜单列表'
-        verbose_name = u'菜单'
+        verbose_name_plural = '菜单列表'
+        verbose_name = '菜单'
 
 
 class NavMenuInline(admin.StackedInline):
