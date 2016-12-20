@@ -430,11 +430,13 @@ blockquote p {
 
 #body .widget_content li a {
     display: block;
-    background-color: #fafafa;
+    height: 35px;
+    line-height: 35px;
     border: 1px solid #e3e3e3;
-    border-top: 0;
-    padding: 10px;
+    border-top: none;
+    padding: 0 10px;
     color: #4c4c4c;
+    background-color: #fafafa;
 }
 
 #body .widget_content li a:hover {
@@ -466,12 +468,63 @@ blockquote p {
 
 #tags_widget .widget_list li a {
     border-left: none;
+}
+
+#tags_widget .widget_list .rotate_x li:first-child a {
+    color: white;
+    border: 1px solid #169fe6;
     border-top: none;
+    background-color: #169fe6;
 }
 
 #tags_widget .white_space {
     height: 0;
     width: 25%;
+}
+
+/*标签列表 3D 翻转效果*/
+.rotate_x ul {
+    position: relative;
+
+    -webkit-transform: rotateX(-90deg);
+    -moz-transform: rotateX(-90deg);
+    -ms-transform: rotateX(-90deg);
+    -o-transform: rotateX(-90deg);
+    transform: rotateX(-90deg);
+
+    transform-style: preserve-3d;
+    -webkit-transition: transform 300ms ease-in-out;
+    -moz-transition: transform 300ms ease-in-out;
+    -ms-transition: transform 300ms ease-in-out;
+    -o-transition: transform 300ms ease-in-out;
+    transition: transform 300ms ease-in-out;
+}
+
+.rotate_x:hover ul {
+    -webkit-transform: rotateX(0deg);
+    -moz-transform: rotateX(0deg);
+    -ms-transform: rotateX(0deg);
+    -o-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+}
+
+.rotate_x ul li:first-child {
+    -webkit-transform: translateZ(18px);
+    -moz-transform: translateZ(18px);
+    -ms-transform: translateZ(18px);
+    -o-transform: translateZ(18px);
+    transform: translateZ(18px);
+}
+
+.rotate_x ul li:last-child {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    -webkit-transform: rotateX(90deg) translateZ(18px);
+    -moz-transform: rotateX(90deg) translateZ(18px);
+    -ms-transform: rotateX(90deg) translateZ(18px);
+    -o-transform: rotateX(90deg) translateZ(18px);
+    transform: rotateX(90deg) translateZ(18px);
 }
 
 /*页脚样式*/
