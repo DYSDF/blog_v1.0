@@ -1,11 +1,10 @@
-# coding: utf-8
-
+# coding=utf-8
 import hashlib
 
 from django.http import HttpResponseNotModified
 
 
-class EtagMiddleware(object):
+class EtagComputeController(object):
     def process_response(self, request, response):
         # 动态页面ETAG缓存策略计算
         if hasattr(response, "content"):

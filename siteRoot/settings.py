@@ -94,7 +94,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 
     # Etag动态缓存中间件
-    'libs.MiddleWare.EtagMiddleWare.EtagMiddleware',
+    'libs.MiddleWare.BaseMiddleWare.EtagComputeController',
 
     # 'django.middleware.cache.FetchFromCacheMiddleware',
 

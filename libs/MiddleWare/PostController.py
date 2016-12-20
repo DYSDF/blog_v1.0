@@ -27,7 +27,6 @@ min_post_interval = 5 * 60 * 1000
 
 
 class PostController(object):
-
     def process_request(self, request):
 
         if not request.user.is_authenticated() or not request.user.is_admin:

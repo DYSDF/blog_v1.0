@@ -38,7 +38,7 @@
         <div id="wrap">
             <header id="header">
                 <div id="header_image"
-                     style="background-image: url({{ head_image | default:'/static/blog/images/header_bg.jpg' }})">
+                     data-image="{{ head_image | default:'/static/blog/images/header_bg.jpg' }}">
                     {#                    <img id="header_img" src="{{ head_image | default:'/static/blog/images/header_bg.jpg' }}"#}
                     {#                         title="欢迎访问本博客">#}
                     <div id="header_logo">

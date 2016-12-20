@@ -86,18 +86,31 @@ require(["DYUtils", "SpiderWeb"], function (DYUtils, SpiderWeb) {
             maxDistance: 200
         });
         spider.start();
-    }, 5000)
+    }, 3000)
 });
 
 // 头图动态效果
 require(["DYUtils"], function (DYUtils) {
+    function headImageAnimte() {
+        setTimeout(function () {
+            DYUtils.removeClassName(DYUtils.querySelector("#container"), "init");
+            DYUtils.setCookie("hasVisited", true, 30 * 60);
+        }, 2000)
+    }
+
     DYUtils.DOMReady(function () {
         var hasVisited = DYUtils.getCookie("hasVisited");
+        var target = DYUtils.querySelector("#header_image");
         if (!hasVisited) {
-            setTimeout(function () {
-                DYUtils.removeClassName(DYUtils.querySelector("#container"), "init");
-            }, 2000)
-            DYUtils.setCookie("hasVisited", true, 30 * 60);
+            var img = document.createElement("img");
+            img.onload = function () {
+                target.style.backgroundImage = "url(" + target.dataset.image + ")";
+                headImageAnimte();
+            }
+            img.onerror = headImageAnimte;
+            img.src = target.dataset.image;
+        } else {
+            target.style.backgroundImage = "url(" + target.dataset.image + ")";
         }
     })
 });
