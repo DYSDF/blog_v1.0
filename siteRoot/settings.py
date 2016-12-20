@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ["23.83.243.206", "127.0.0.1", "localhost", ".duan-ya.com"]
 # Application definition
 
 INSTALLED_APPS = [
-    'suit',
     'accounts',  # 自定义用户系统
     'django.contrib.admin',
     'django.contrib.auth',

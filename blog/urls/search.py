@@ -5,6 +5,8 @@ from blog.views.search import search
 
 urlpatterns = [
 
+    url(r'^$', search),  # 关键字搜索
+
     url(r'(?P<type>keyword)/(?P<kw>\w+)$', search),  # 关键字搜索
     url(r'(?P<type>keyword)/(?P<kw>\w+)/page/(?P<page>\d+)$', search),  # 关键字搜索(分页)
 

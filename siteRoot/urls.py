@@ -30,11 +30,11 @@ urlpatterns = [
 
     # 博文入口
     url(r'^article/', include('blog.urls.post')),
-    url(r'^article$', blog_list),  # 博文列表
+    # url(r'^article$', blog_list),  # 博文列表
 
     # 搜索入口
     url(r'^search/', include('blog.urls.search')),
-    url(r'^search$', blog_search),
+    # url(r'^search$', blog_search),
 
     # 评论入口（包括文章品论与留言板）
     url(r'^comment/', include('blog.urls.comment')),

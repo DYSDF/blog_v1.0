@@ -1,0 +1,1 @@
+(function(b){var c=b("#django-admin-prepopulated-fields-constants").data("prepopulatedFields");b.each(c,function(c,a){b(".empty-form .form-row .field-"+a.name+", .empty-form.form-row .field-"+a.name).addClass("prepopulated_field");b(a.id).data("dependency_list",a.dependency_list).prepopulate(a.dependency_ids,a.maxLength,a.allowUnicode)})})(django.jQuery);
