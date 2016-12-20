@@ -1,0 +1,9 @@
+{% extends "blog/base.html" %}
+
+{% block siteTitle %}
+    <title>{{ flatpage.title }}</title>
+{% endblock %}
+
+{% block simplePage %}
+    {{ flatpage.content }}
+{% endblock %}

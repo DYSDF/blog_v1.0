@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'django.contrib.flatpages',  # flatpages应用
+    'simplePage',  # flatpages应用
     'siteRoot',
     'blog',
     'music',
@@ -56,9 +56,9 @@ SUIT_CONFIG = {
     'HEADER_TIME_FORMAT': 'H:i',
     'MENU': (
         {'app': 'sites', 'label': u'站点管理'},
-        {'app': 'flatpages', 'label': u'页面管理'},
-        {'app': 'accounts', 'label': u'账户管理'},
         {'app': 'auth', 'label': u'用户组管理'},
+        {'app': 'accounts', 'label': u'账户管理'},
+        {'app': 'simplepage', 'label': u'页面管理'},
         {'app': 'blog', 'label': u'博客管理'},
         {'app': 'filemanage', 'label': u'文件管理'},
         # {'app': 'music', 'label': u'音乐'},
@@ -90,8 +90,8 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # flatpages中间件
-    'django.contrib.flatpages.middleware.Http404',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'simplePage.middleware.Http404',
+    'simplePage.middleware.FlatpageFallbackMiddleware',
 
     # Etag动态缓存中间件
     'libs.MiddleWare.BaseMiddleWare.EtagComputeController',

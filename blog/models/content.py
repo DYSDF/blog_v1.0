@@ -140,7 +140,7 @@ class ContentAdmin(admin.ModelAdmin):
     class Media:
         js = (
             'ckeditor/ckeditor.js',
-            'ckeditor/admin_content_init.js'
+            'ckeditor/blog_config.js'
         )
 
 

@@ -94,7 +94,7 @@ require(["DYUtils"], function (DYUtils) {
     function headImageAnimte() {
         setTimeout(function () {
             DYUtils.removeClassName(DYUtils.querySelector("#container"), "init");
-            DYUtils.setCookie("hasVisited", true, 30 * 60);
+            DYUtils.setCookie("hasVisited", true, 30 * 60, "/");
         }, 2000)
     }
 

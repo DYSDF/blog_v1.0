@@ -66,14 +66,17 @@
             <div id="body">
                 <div class="container">
                     <div class="left">
-                        {#                    首页博文列表加载#}
+                        {#首页博文列表加载#}
                         {% block post_wrap %}{% endblock %}
 
-                        {#                    博文详情加载#}
+                        {#博文详情加载#}
                         {% block post_single %}{% endblock %}
 
-                        {#                    博文时间轴加载#}
+                        {#博文时间轴加载#}
                         {% block articles %}{% endblock %}
+
+                        {#简单页加载#}
+                        {% block simplePage %}{% endblock %}
                     </div>
                     <div class="right">
                         {% include "blog/model/comment_widget.html" %}
