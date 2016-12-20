@@ -4,19 +4,20 @@
  * 一个快速滚动指定位置的插件，原生JS
  */
 
-define(["DYUtils"], function (DYUtils) {
-    function FastScroll(ev) {
+define(["DYUtils", "Tween"], function (DYUtils, Tween) {
+    function FastScroll(ev, dur) {
         if (!(ev instanceof HTMLElement)) {
             throw "传入参数不是有效的HTMLElement";
         }
         this.target = ev;
+        this.scrollMax = this.target.scrollHeight - this.target.parentElement.clientHeight;
+        this.totalTime = dur || 600;
 
         // 定义变量
-        var scrollMax = this.target.scrollHeight - this.target.parentElement.clientHeight,
-            step,
-            targetScroll;
         var isUserScroll;
-
+        var startTime;
+        var startScroll;
+        var durScroll;
 
         // 初始化
         this.onScrollEnd = function () {
@@ -39,21 +40,19 @@ define(["DYUtils"], function (DYUtils) {
             };
 
             FastScroll.prototype.goBottom = function () {
-                this.goTo(scrollMax);
+                this.goTo(this.scrollMax);
             };
 
             FastScroll.prototype.goTo = function (t) {
-                targetScroll = t > scrollMax ? scrollMax : (t < 0 ? 0 : t);
                 isUserScroll = false;
+                startTime = Date.now();
+                startScroll = this.target.scrollTop;
+                durScroll = (t > this.scrollMax ? this.scrollMax : (t < 0 ? 0 : t)) - startScroll;
                 DYUtils.fastAnimation(function () {
-                    if (isUserScroll) return isUserScroll = false;
-
-                    var distance = targetScroll * 1 - this.target.scrollTop;
-                    if (parseInt(distance) == 0) return;
-                    var step = distance / 5;
-                    if (Math.abs(step) < 1) step = Math.abs(step) / step;
-                    this.target.scrollTop += step;
-                    if (this.target.scrollTop != targetScroll) {
+                    if (isUserScroll) return;
+                    var durTime = Date.now() - startTime;
+                    this.target.scrollTop = Tween.Cubic.easeOut(durTime, startScroll, durScroll, this.totalTime);
+                    if (durTime <= this.totalTime) {
                         DYUtils.fastAnimation(arguments.callee.bind(this));
                     } else {
                         this.onScrollEnd();
