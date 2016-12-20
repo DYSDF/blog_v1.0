@@ -498,6 +498,8 @@ blockquote p {
 
 .rotate_x ul li:first-child {
     padding: 0 10px;
+    background-color: #fdfdfd;
+
     -webkit-transform: translateZ(18px);
     -moz-transform: translateZ(18px);
     -ms-transform: translateZ(18px);
