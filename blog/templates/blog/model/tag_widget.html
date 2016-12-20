@@ -6,11 +6,13 @@
         <ul class="widget_list">
             {% for tag in tag_model %}
                 {% ifnotequal tag.count 0 %}
-                    <li class="rotate_x">
-                        <ul>
-                            <li><a href="/search/tag/{{ tag.id }}">{{ tag.tag }}({{ tag.count }})</a></li>
-                            <li><a href="/search/tag/{{ tag.id }}">{{ tag.tag }}({{ tag.count }})</a></li>
-                        </ul>
+                    <li>
+                        <a href="/search/tag/{{ tag.id }}" class="rotate_x">
+                            <ul>
+                                <li>{{ tag.tag }}({{ tag.count }})</li>
+                                <li>{{ tag.tag }}</li>
+                            </ul>
+                        </a>
                     </li>
                 {% endifnotequal %}
             {% endfor %}

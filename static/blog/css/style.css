@@ -467,14 +467,8 @@ blockquote p {
 }
 
 #tags_widget .widget_list li a {
+    padding: 0;
     border-left: none;
-}
-
-#tags_widget .widget_list .rotate_x li:first-child a {
-    color: white;
-    border: 1px solid #169fe6;
-    border-top: none;
-    background-color: #169fe6;
 }
 
 #tags_widget .white_space {
@@ -486,12 +480,6 @@ blockquote p {
 .rotate_x ul {
     position: relative;
 
-    -webkit-transform: rotateX(-90deg);
-    -moz-transform: rotateX(-90deg);
-    -ms-transform: rotateX(-90deg);
-    -o-transform: rotateX(-90deg);
-    transform: rotateX(-90deg);
-
     transform-style: preserve-3d;
     -webkit-transition: transform 300ms ease-in-out;
     -moz-transition: transform 300ms ease-in-out;
@@ -501,14 +489,15 @@ blockquote p {
 }
 
 .rotate_x:hover ul {
-    -webkit-transform: rotateX(0deg);
-    -moz-transform: rotateX(0deg);
-    -ms-transform: rotateX(0deg);
-    -o-transform: rotateX(0deg);
-    transform: rotateX(0deg);
+    -webkit-transform: rotateX(90deg);
+    -moz-transform: rotateX(90deg);
+    -ms-transform: rotateX(90deg);
+    -o-transform: rotateX(90deg);
+    transform: rotateX(90deg);
 }
 
 .rotate_x ul li:first-child {
+    padding: 0 10px;
     -webkit-transform: translateZ(18px);
     -moz-transform: translateZ(18px);
     -ms-transform: translateZ(18px);
@@ -519,12 +508,15 @@ blockquote p {
 .rotate_x ul li:last-child {
     position: absolute;
     top: 0;
+    left: 0;
     width: 100%;
-    -webkit-transform: rotateX(90deg) translateZ(18px);
-    -moz-transform: rotateX(90deg) translateZ(18px);
-    -ms-transform: rotateX(90deg) translateZ(18px);
-    -o-transform: rotateX(90deg) translateZ(18px);
-    transform: rotateX(90deg) translateZ(18px);
+    color: white;
+    background-color: #19b1ff;
+    -webkit-transform: rotateX(-90deg) translateZ(18px);
+    -moz-transform: rotateX(-90deg) translateZ(18px);
+    -ms-transform: rotateX(-90deg) translateZ(18px);
+    -o-transform: rotateX(-90deg) translateZ(18px);
+    transform: rotateX(-90deg) translateZ(18px);
 }
 
 /*页脚样式*/
