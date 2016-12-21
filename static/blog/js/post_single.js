@@ -81,10 +81,10 @@ require(["jquery","DYUtils"], function ($, DYUtils) {
                 if(data.success){
                     $("#comment_form").get(0).reset();
                     showTips("评论成功！感谢回复~", function () {
-                        // window.location.reload();
+                        window.location.reload();
                     });
                 } else {
-                    showTips(data.msg);
+                    showTips(data.result);
                 }
             },
             error: function () {

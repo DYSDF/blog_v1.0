@@ -1,10 +1,9 @@
 # coding: utf-8
-import datetime
+from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.db import models
 from django import forms
-from django.utils import timezone
 
 
 class CommentManager(models.Manager):
@@ -19,13 +18,15 @@ class CommentManager(models.Manager):
 
 # 评论列表
 class Comment(models.Model):
-    name = models.CharField(max_length=25, verbose_name=u'回复者名称')
-    email = models.EmailField(max_length=25, verbose_name=u'回复者Email')
-    content = models.TextField(max_length=200, verbose_name=u'回复内容')
+    name = models.CharField(max_length=25, verbose_name='回复者名称')
+    email = models.EmailField(max_length=25, verbose_name='回复者Email')
+    title = models.CharField(max_length=100, verbose_name='回复主题', null=True, blank=True)
+    content = models.TextField(max_length=200, verbose_name='回复内容')
+    site = models.URLField(max_length=100, verbose_name='网站', null=True, blank=True)
     date = models.DateTimeField(verbose_name=u'回复日期', auto_now_add=True)
-    source = models.ForeignKey("blog.Content", related_name=u'comments', verbose_name=u'回复文章')
-    reply_to = models.ForeignKey('self', null=True, blank=True, related_name=u'reply', verbose_name=u'回应')
-    ip = models.GenericIPAddressField(blank=True, null=True, verbose_name=u'IP地址')
+    source = models.ForeignKey("blog.Content", related_name='comments', verbose_name='回复文章', null=True, blank=True)
+    reply_to = models.ForeignKey('self', null=True, blank=True, related_name=u'reply', verbose_name='回应')
+    ip = models.GenericIPAddressField(blank=True, null=True, verbose_name='IP地址')
 
     objects = CommentManager()
 
@@ -55,13 +56,12 @@ admin.site.register(Comment, CommentAdmin)
 
 # 评论表对应的Form
 class CommentForm(forms.ModelForm):
-
     class Meta:
         # 表单引用model
         model = Comment
 
         # 表单使用的Field
-        fields = ("name", "email", "content", "source", "reply_to", "ip")
+        fields = ("name", "email", "content", "site", "source", "reply_to", "ip")
 
         # Feild对应的label
         # labels = {
@@ -72,19 +72,28 @@ class CommentForm(forms.ModelForm):
 
         # 表单渲染处理
         widgets = {
-            # 为各个需要渲染的字段指定渲染成什么html组件，主要是为了添加css样式。
+            # 为各个字段渲染成 html 组件添加必要属性
             'name': forms.TextInput(attrs={
+                'id': 'comment_name',
                 'placeholder': "昵称",
                 "class": "text",
             }),
             'email': forms.TextInput(attrs={
+                'id': 'comment_email',
                 'placeholder': "邮箱",
                 "class": "text",
             }),
             'content': forms.Textarea(attrs={
-                # 'placeholder': '我来评两句~'
+                'id': 'comment_content',
+                # 'placeholder': '我来评两句~',
                 "class": "textarea"
             }),
+            'site': forms.TextInput(attrs={
+                'id': 'comment_site',
+                'placeholder': '微博或网址',
+                "class": "text",
+                "type": "url"
+            })
         }
 
         # 改写错误提示
@@ -103,5 +112,9 @@ class CommentForm(forms.ModelForm):
                 "max_length": u"回复内容文字过长",
                 "required": u"回复内容不能为空",
                 "invalid": u"回复内容格式不正确",
+            },
+            "site": {
+                "max_length": u"网址过长",
+                "invalid": u"网址不正确",
             }
         }
