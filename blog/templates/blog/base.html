@@ -16,7 +16,7 @@
     {# 基础样式表#}
     <link rel="stylesheet" type="text/css" href="{% static 'common/css/reset.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'blog/css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'fontAwesome/css/font-awesome.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'blog/css/animation.css' %}">
     {#额外样式表#}
     {% block styleSheet %}{% endblock %}
@@ -84,9 +84,14 @@
                         {% include "blog/model/tag_widget.html" %}
                     </div>
                 </div>
-                <a href="javascript:;" id="go_to_top" class="icon-arrow-up"></a>
+                <a href="javascript:;" id="go_to_top" class="icon icon-arrow-up"></a>
             </div>
             <div id="footer">
+                <div class="fast_enter">
+                    <a href="https://github.com/DYSDF" title="我的github" target="_blank" rel="noopener"><i class="icon icon-github"></i></a>
+                    <a href="mailto:958439263@qq.com" title="我的邮箱"><i class="icon icon-envelope"></i></a>
+                    <a href="/admin" title="登陆管理"><i class="icon icon-sign-in"></i></a>
+                </div>
                 <div class="copyright">
                     Copyright © <a href="/">2016 断崖上的风 - duan-ya.com</a>
                 </div>

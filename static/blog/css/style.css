@@ -523,18 +523,29 @@ blockquote p {
 
 /*页脚样式*/
 #footer {
+    border-top: 4px solid #169fe6;
     background: #3C3C3C;
 }
 
 #footer .copyright {
     padding: 12px;
-    border-top: 4px solid #169fe6;
     text-align: center;
     color: #fff;
 }
 
 #footer .copyright a {
     color: #dfc1ff;
+}
+
+#footer .fast_enter {
+    text-align: center;
+    font-size: 24px;
+    word-spacing: 0.4em;
+}
+
+#footer .fast_enter a {
+    text-decoration: none;
+    color: #8ac8e8;
 }
 
 /*博客时间轴列表*/

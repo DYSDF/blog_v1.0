@@ -6,25 +6,22 @@
     <input type="hidden" name="{{ comment_form.reply_to.name }}">
     <div class="comment_textarea">
         {{ comment_form.content }}
-{#                    <textarea name="{{ comment_form.content.name }}" class="textarea" required=""></textarea>#}
     </div>
     <div class="comment_input">
         <div class="cfq">
             <i class="icon icon-user"></i>
             {{ comment_form.name }}
-{#                        <input name="author" id="author" class="text" placeholder="昵称" value="" required="" type="text">#}
         </div>
         <div class="cfq">
             <i class="icon icon-envelope"></i>
             {{ comment_form.email }}
-{#                        <input name="mail" id="mail" class="text" placeholder="邮箱" value="" required="" type="email">#}
         </div>
         <div class="cfq">
             <i class="icon icon-home"></i>
             <input name="url" id="url" class="text" placeholder="微博或网址" value="" type="url">
         </div>
         <div class="cfq_button">
-            <button type="submit" class="submit"><i class="icon icon-ok"></i></button>
+            <button type="submit" class="submit"><i class="icon icon-check"></i></button>
         </div>
     </div>
 </form>
