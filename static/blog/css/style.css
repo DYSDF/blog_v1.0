@@ -30,6 +30,7 @@ blockquote p {
     font-family: "Microsoft Yahei", "宋体", "Arial Narrow", HELVETICA, serif;
     font-size: 87.5%;
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 #container {
