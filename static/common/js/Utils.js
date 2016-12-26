@@ -234,6 +234,14 @@ define([], function () {
         getLocalStorage: function (key) {
             return window.localStorage.getItem(key);
         },
+        
+        // sessionStorage 操作
+        setSessionStorage: function (key, value) {
+            window.sessionStorage.setItem(key, JSON.stringify(value));
+        },
+        getSessionStorage: function (key) {
+            return window.sessionStorage.getItem(key);
+        },
 
         //ajax 操作
         ajax: function (opt) {

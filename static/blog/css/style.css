@@ -31,12 +31,6 @@ blockquote p {
     font-size: 87.5%;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-
-    -webkit-transform: translate3d(0, 0, 0);
-    -moz-transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0);
-    -o-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
 }
 
 #container {
@@ -105,7 +99,7 @@ blockquote p {
     display: table-cell;
     height: 150px;
     min-width: 270px;
-    padding: 37px 0 37px 40px;
+    padding: 37px 40px;
     color: #fff;
     text-align: center;
     vertical-align: middle;
