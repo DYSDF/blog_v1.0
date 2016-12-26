@@ -796,13 +796,20 @@ a:hover, a:active, a:focus {
 
     #control_ablum {
         position: fixed;
-        top: 12%;
+        top: 0;
         width: 30vh;
         height: 30vh;
         margin-top: 0;
         margin-left: -15vh;
         border-radius: 0;
         box-shadow: 0 0 0 4px #f8f8f8 inset, 0 0 4px rgba(0, 0, 0, 0.4), 0 0 10px black inset;
+
+        -webkit-transform: translateY(-110%);
+        -moz-transform: translateY(-110%);
+        -ms-transform: translateY(-110%);
+        -o-transform: translateY(-110%);
+        transform: translateY(-110%);
+
         -webkit-animation: none;
         -o-animation: none;
         animation: none;

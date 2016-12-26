@@ -627,14 +627,18 @@ blockquote p {
 
 /*右侧博文列表*/
 #post_list {
-    overflow: hidden;
     line-height: 1.8;
     padding: 4px 20px;
     border: 1px solid #e3e3e3;
     margin-left: 80px;
+    overflow: hidden;
 }
 
 #post_list li {
+    display: -webkit-box;
+    display: flex;
+    word-wrap: break-word;
+    word-break: break-all;
     overflow: auto;
 }
 
@@ -646,6 +650,9 @@ blockquote p {
 }
 
 #post_list div {
+    -webkit-box-flex: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
     float: left;
     color: #555;
     font-size: 16px;
