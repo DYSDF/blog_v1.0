@@ -2,7 +2,7 @@
  * Created by 断崖 on 2016/12/9.
  */
 
-define([], function () {
+(function () {
     // 基本方法
     var DYUtils = {
         // 浏览器检测
@@ -381,6 +381,11 @@ define([], function () {
         };
     })();
 
-    if (!window.DYUtils) window.DYUtils = DYUtils;
-    return DYUtils;
+    if (typeof define === 'function' && (define.amd || define.cmd)) {
+        define(function () {
+            return DYUtils;
+        });
+    } else {
+        window.DYUtils = DYUtils;
+    }
 });
