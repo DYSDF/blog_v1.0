@@ -7,7 +7,9 @@
 
 (function () {
     function ScrollProgressBar(el) {
+
         var self = this;
+
         // 获取滚动信息的目标元素
         if (typeof el === "string") {
             el = document.getElementById("el");
@@ -47,6 +49,7 @@
                 this.progressbar.style.transform = "scaleX(" + (scrollTop / (scrollHeight - offsetHeight)).toFixed(4) + ")";
             }
         }
+
         this.targetEl.scrollTop += 1;
     }
     
@@ -55,6 +58,6 @@
             return ScrollProgressBar;
         });
     } else {
-        window.ScrollProgressBar = exports;
+        window.ScrollProgressBar = ScrollProgressBar;
     }
-})();
+});

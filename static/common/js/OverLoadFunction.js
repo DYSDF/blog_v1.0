@@ -3,7 +3,7 @@
  */
 
 //JS函数重载模拟
-define([], function () {
+(function () {
     function Overload(fn_objs) {
         var is_match = function (x, y) {
             if (x == y) return true;
@@ -48,7 +48,11 @@ define([], function () {
         return ret;
     }
 
-    if(!window.Overload) window.Overload = Overload;
-
-    return Overload;
-});
+    if (typeof define === 'function' && (define.amd || define.cmd)) {
+        define(function () {
+            return Overload;
+        });
+    } else {
+        window.Overload = Overload;
+    }
+})();

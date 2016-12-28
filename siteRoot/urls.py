@@ -53,4 +53,7 @@ urlpatterns = [
     #     {'document_root': settings.STATIC_ROOT}),
     url(r'^media/(?P<path>.*)$', static.serve,
         {'document_root': settings.MEDIA_ROOT}),
+
+    # api 入口
+    url(r'^api/', include('service.urls.index'))
 ]

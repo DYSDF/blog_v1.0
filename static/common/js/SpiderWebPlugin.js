@@ -2,17 +2,18 @@
  * Created by 断崖 on 2016/12/13.
  */
 
-// 定义高速动画接口（向下兼容）
-window.requestAnimationFrame = (function () {
-    return window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        function (callback) {
-            window.setTimeout(callback, 1000 / 60);
-        };
-})();
+(function () {
+    // 定义高速动画接口（向下兼容）
+    function requestAnimationFrame(fn) {
+        var requestAnimation = window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+        requestAnimation(fn);
+    }
 
-define([], function () {
     function SpiderWeb(canvasEl, opts) {
         if (Object.prototype.toString.call(canvasEl) != "[object HTMLCanvasElement]") {
             return;
@@ -101,7 +102,7 @@ define([], function () {
 
         canvasEl.width = canvasWidth = canvasEl.offsetWidth * scale;
         canvasEl.height = canvasHeight = canvasEl.offsetHeight * scale;
-        bindEvent(window, "resize", function () {
+        bindEvent(canvasEl, "mouseover", function () {
             canvasEl.width = canvasWidth = canvasEl.offsetWidth * scale;
             canvasEl.height = canvasHeight = canvasEl.offsetHeight * scale;
         });
@@ -199,9 +200,9 @@ define([], function () {
         }
 
         function start() {
-            window.requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
                 render();
-                window.requestAnimationFrame(arguments.callee);
+                requestAnimationFrame(arguments.callee);
             })
         }
 
@@ -210,7 +211,11 @@ define([], function () {
         }
     }
 
-    if (!window.SpiderWeb) window.SpiderWeb = SpiderWeb;
-
-    return SpiderWeb;
-});
+    if (typeof define === 'function' && (define.amd || define.cmd)) {
+        define(function () {
+            return SpiderWeb;
+        });
+    } else {
+        window.SpiderWeb = SpiderWeb;
+    }
+})();

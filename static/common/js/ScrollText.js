@@ -2,7 +2,7 @@
  * Created by 断崖 on 2016/12/8.
  */
 
-define([], function () {
+(function () {
     function ScrollText(element, direction) {
         if (!(element instanceof HTMLElement)) throw "非DOM元素";
 
@@ -42,8 +42,12 @@ define([], function () {
             }
         }.bind(this))
     }
-
-    if (window.ScrollText) window.ScrollText = ScrollText;
-
-    return ScrollText;
-});
+    
+    if (typeof define === 'function' && (define.amd || define.cmd)) {
+        define(function () {
+            return ScrollText;
+        });
+    } else {
+        window.ScrollText = ScrollText;
+    }
+})();

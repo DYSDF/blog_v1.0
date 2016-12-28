@@ -5,19 +5,11 @@
 (function () {
     // 基本方法
     var DYUtils = {
-        // 浏览器检测
-        browser: {
-            ie: function () {
-                var b = document.createElement('b');
-                for (var i = 6; i < 20; i++) {
-                    b.innerHTML += '<!--[if IE ' + i + ']><i></i><![endif]-->';
-                }
-                document.body.appendChild(b);
-                return b.getElementsByTagName('i').length;
-            }
-        },
-
         // JS 设计模式
+        // deepCopy
+        deepCopy: function (source) {
+            return JSON.parse(JSON.stringify(source));
+        },
         // 转换成object
         toObject: function (str) {
             var obj = JSON.parse(str);
@@ -234,7 +226,7 @@
         getLocalStorage: function (key) {
             return window.localStorage.getItem(key);
         },
-        
+
         // sessionStorage 操作
         setSessionStorage: function (key, value) {
             window.sessionStorage.setItem(key, JSON.stringify(value));
@@ -257,26 +249,35 @@
             var beforeSend = opt.beforeSend || fn;
             var success = opt.success || fn;
             var error = opt.error || fn;
+
+            //建立xmlhttp实例
+            var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+
             //方法大写
             method = method.toUpperCase();
 
-            //改写data数据结构
-            if (data) {
-                if (typeof data == 'object') {
-                    var arr = [];
-                    for (var k in data) {
-                        arr.push(k + "=" + data[k]);
-                    }
-                    data = arr.join("&");
-                }
+            // 建立连接
+            xhr.open(method, url, async);
 
+            //改写data数据结构
+            if (!(data instanceof FormData)) {
+                if (data) {
+                    if (typeof data == 'object') {
+                        var arr = [];
+                        for (var k in data) {
+                            arr.push(k + "=" + data[k]);
+                        }
+                        data = arr.join("&");
+                    }
+
+                }
+                if (data && method == "GET") {
+                    url += (url.indexOf('?') == -1 ? '?' : '&') + data;
+                    data = null;
+                }
+                // 改写请求头
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
             }
-            if (data && method == "GET") {
-                url += (url.indexOf('?') == -1 ? '?' : '&') + data;
-                data = null;
-            }
-            //建立xmlhttp实例
-            var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 
             //定义响应事件
             xhr.onreadystatechange = function () {
@@ -291,12 +292,7 @@
                 }
             };
 
-            // 建立连接
-            xhr.open(method, url, async);
-
-            // 改写请求头
-            xhr.setRequestHeader('Request-type', 'ajax');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            // 发送前动作
             beforeSend.call(this, xhr);
 
             //发送请求
@@ -319,6 +315,18 @@
     };
 
     // 增强方法
+    // 浏览器检测
+    DYUtils.browser = {
+        ie: function () {
+            var b = document.createElement('b');
+            for (var i = 6; i < 20; i++) {
+                b.innerHTML += '<!--[if IE ' + i + ']><i></i><![endif]-->';
+            }
+            document.body.appendChild(b);
+            return b.getElementsByTagName('i').length;
+        }
+    };
+    // DOM完成时事件动作
     DYUtils.DOMReady = (function () {
         var isDOMReady = false;
         var domReadyMonitorId;
@@ -380,6 +388,19 @@
             readyFuncArray.push({func: callback, delay: delay, done: false});
         };
     })();
+    // 表单序列化
+    DYUtils.serialize = function (el) {
+        if (window.FormData) return new FormData(el);
+
+        var formData = "";
+        el.elements.forEach(function (item) {
+            if (item.name && item.value) {
+                var v = (item.type == "checkbox" || item.type == "radio" ? (item.checked ? item.value : '') : item.value);
+                if (v) formData += item.name + "=" + escape(v) + "&";
+            }
+        });
+        return formData;
+    };
 
     if (typeof define === 'function' && (define.amd || define.cmd)) {
         define(function () {
@@ -388,4 +409,4 @@
     } else {
         window.DYUtils = DYUtils;
     }
-});
+})();

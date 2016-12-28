@@ -6,7 +6,7 @@
  * d: duration（持续时间）。
  * you can visit 'http://easings.net/zh-cn' to get effect
  */
-define([], function () {
+(function () {
     var Tween = {
         Linear: function (t, b, c, d) {
             return c * t / d + b;
@@ -177,8 +177,12 @@ define([], function () {
             }
         }
     };
-
-    Math.tween = Tween;
-
-    return Tween;
-});
+    
+    if (typeof define === "function" && (define.amd || define.cmd)) {
+        define(function () {
+            return Tween
+        })
+    } else {
+        Math.tween = Tween;
+    }
+})();

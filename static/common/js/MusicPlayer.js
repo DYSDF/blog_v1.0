@@ -170,8 +170,13 @@ define(["DYUtils"], function (DYUtils) {
         }
 
     }
+    
+    if (typeof define === 'function' && (define.amd || define.cmd)) {
+        define(function () {
+            return SimpleMusicPlayer;
+        });
+    } else {
+        window.SimpleMusicPlayer = SimpleMusicPlayer;
+    }
 
-    if (!window.SimpleMusicPlayer) window.SimpleMusicPlayer = SimpleMusicPlayer;
-
-    return SimpleMusicPlayer;
 });

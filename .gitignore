@@ -2,6 +2,7 @@
 .idea/
 .vscode/
 media/
+public/
 
 #file
 *.pyc
