@@ -1,11 +1,7 @@
 # coding: utf-8
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Count
 from django.http import QueryDict
-from django.template import loader
-from django.core.cache import cache
-from django.contrib.sites.shortcuts import get_current_site
-from blog.models import Cats, Tags, Comment, Settings
+from dss.Serializer import serializer
 
 
 def get_base_result():
@@ -45,7 +41,7 @@ def get_pagination_result(object_list, **kwargs):
         "page": page,
         "rows": rows,
         "total": len(object_list),
-        "data": objects.object_list
+        "data": serializer(objects.object_list, foreign=True, many=True)
     })
 
     return result

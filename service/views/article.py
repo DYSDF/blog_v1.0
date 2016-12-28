@@ -4,8 +4,9 @@ import json
 from django.db.models import Count
 from django.http import QueryDict, HttpResponse
 from django.template import loader
-from blog.models import Content, CommentForm
-from django.core.serializers import serialize
+from dss.Serializer import serializer
+
+from blog.models import Content, CommentForm, Comment
 
 from service.views import utils
 from service.views.JSONEncoder import JSONEncoder
@@ -28,12 +29,21 @@ def article_list(request, **kwargs):
         # 获取queryset对象
         contents = Content.objects.accessible(request.user)
 
-        result.update(utils.get_pagination_result(contents, page=page, rows=rows))
+        pagination_result = utils.get_pagination_result(contents, page=page, rows=rows)
+
+        # 获取评论数
+        for item in pagination_result.get("data", []):
+            comments = Comment.objects.accessible(request.user).filter(source__id=item["id"])
+            item.update({
+                'comments': comments.__len__()
+            })
+
+        result.update(pagination_result)
 
     elif request.method == "POST":
         queries.update(request.POST)
 
-    return HttpResponse(json.dumps(result, cls=JSONEncoder), content_type="application/json")
+    return HttpResponse(json.dumps(result), content_type="application/json")
 
 
 # 博文详情
