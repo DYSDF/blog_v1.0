@@ -49,8 +49,9 @@ def article_list(request, **kwargs):
 # 博文详情
 def article_detail(request, **kwargs):
     queries = QueryDict('').copy()
-    queries.update(kwargs)
     queries.update(request.GET)
+
+    result = utils.get_base_result()
 
     # 获取queryset对象
     objects = Content.objects.accessible(request.user)
@@ -58,31 +59,22 @@ def article_detail(request, **kwargs):
     article_id = queries.get("id")
     content = objects.get(pk=article_id)
 
+    result.update({
+        'success': True,
+        'data': serializer(content, datetime_format='string', foreign=True, many=True)
+    })
+
     id_list = objects.values_list("pk", flat=True)
-    dic = {}
     id_list = list(id_list)
     if id_list:
         id_index = id_list.index(int(article_id))  # 当前id的索引
         if id_index - 1 >= 0:
-            dic.update({
-                "prev": objects.get(pk=id_list[id_index - 1])
+            result["data"].update({
+                "prev": serializer(objects.get(pk=id_list[id_index - 1]), datetime_format='string')
             })
         if id_index + 1 < len(id_list):
-            dic.update({
-                "next": objects.get(pk=id_list[id_index + 1])
+            result["data"].update({
+                "next": serializer(objects.get(pk=id_list[id_index + 1]), datetime_format='string')
             })
 
-    comment_list = content.comments.all().annotate(count=Count("reply")).order_by("-date")
-    dic.update({
-        'result': content,
-        "comments": utils.get_comments_tree(request, comment_list=comment_list),
-        "comment_form": CommentForm()
-    })
-
-    context = utils.get_base_context(request)
-    context.update(dic)
-
-    # return render_to_response("post_single.html", context, context_instance=RequestContext(request))
-    html = loader.render_to_string(template_name="blog/post_single.html", context=context, request=request)
-
-    return HttpResponse(html)
+    return HttpResponse(json.dumps(result), content_type="application/json")

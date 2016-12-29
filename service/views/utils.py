@@ -41,7 +41,7 @@ def get_pagination_result(object_list, **kwargs):
         "page": page,
         "rows": rows,
         "total": len(object_list),
-        "data": serializer(objects.object_list, foreign=True, many=True)
+        "data": serializer(objects.object_list, datetime_format="string", foreign=True, many=True)
     })
 
     return result
