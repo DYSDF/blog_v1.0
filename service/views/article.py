@@ -1,17 +1,16 @@
 # coding: utf-8
 import json
 
-from django.db.models import Count
+import datetime
 from django.http import QueryDict, HttpResponse
-from django.template import loader
 from dss.Serializer import serializer
 
-from blog.models import Content, CommentForm, Comment
+from blog.models import Content, Comment
 
 from service.views import utils
-from service.views.JSONEncoder import JSONEncoder
 
 
+# 博客列表
 def article_list(request, **kwargs):
     queries = QueryDict('').copy()
     queries.update(kwargs)
@@ -42,6 +41,35 @@ def article_list(request, **kwargs):
 
     elif request.method == "POST":
         queries.update(request.POST)
+
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+
+# 博客时间轴
+def article_time(request, **kwargs):
+    queries = QueryDict('').copy()
+    queries.update(kwargs)
+
+    result = utils.get_base_result()
+
+    articles = Content.objects.accessible(request.user)
+    time_tree = {}
+    for a in articles:
+        y = datetime.datetime.strftime(a.create_time, "%Y")
+        m = datetime.datetime.strftime(a.create_time, "%m")
+        d = datetime.datetime.strftime(a.create_time, "%d")
+        time_tree.setdefault(y, {}).setdefault(m, {}).setdefault(d, []).append(serializer(a, datetime_format='string'))
+    # for yItem in time_tree:
+    #     for mItem in time_tree[yItem]:
+    #         time_tree[yItem][mItem] = sorted(time_tree[yItem][mItem].iteritems(), key=lambda item: item[0], reverse=True)
+    #         time_tree[yItem] = sorted(time_tree[yItem].iteritems(), key=lambda item: item[0], reverse=True)
+
+    # time_tree = sorted(time_tree.iteritems(), key=lambda item: item[0], reverse=True)
+
+    result.update({
+        'success': True,
+        'data': time_tree
+    })
 
     return HttpResponse(json.dumps(result), content_type="application/json")
 
