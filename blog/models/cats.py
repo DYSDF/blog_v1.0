@@ -15,7 +15,7 @@ class CatsManager(models.Manager):
 
 class Cats(models.Model):
     cat = models.CharField(max_length=25, verbose_name=u'归档标签', help_text=u'用于给文章归档分类')
-    base_type = models.ForeignKey('self', null=True, blank=True, verbose_name=u'所属类别', related_name="baseType")
+    base_type = models.ForeignKey('self', null=True, blank=True, verbose_name=u'所属类别', related_name="childType")
 
     objects = CatsManager()
 

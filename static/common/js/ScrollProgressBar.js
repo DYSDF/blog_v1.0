@@ -60,4 +60,4 @@
     } else {
         window.ScrollProgressBar = ScrollProgressBar;
     }
-});
+})();
