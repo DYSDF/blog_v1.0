@@ -12,5 +12,7 @@ urlpatterns = [
 
     url(r'^search/', include('service.urls.search')),
 
-    url(r'^user/', include('service.urls.customer'))
+    url(r'^user/', include('service.urls.customer')),
+
+    url(r'^site/', include('service.urls.options'))
 ]
