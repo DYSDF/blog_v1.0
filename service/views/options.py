@@ -1,11 +1,14 @@
 # coding: utf-8
 import json
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponsePermanentRedirect
 from django.contrib.sites.shortcuts import get_current_site
 from service.views import utils
+
 from blog.models import Settings
 from simplePage.models import FlatPage
+from django.conf import settings
 
 from dss.Serializer import serializer
 
@@ -27,22 +30,25 @@ def nav_menu(request, **kwargs):
 
 
 def simple_page(request, url):
+    result = utils.get_base_result()
+
     if not url.startswith('/'):
         url = '/' + url
     site_id = get_current_site(request).id
-    f = FlatPage.objects.get(url=url, sites=site_id)
-    if f is None:
-        if not url.endswith('/') and settings.APPEND_SLASH:
-            url += '/'
-            f = FlatPage.objects.get(url=url, sites=site_id)
-            return HttpResponsePermanentRedirect('%s/' % request.path)
     try:
         f = FlatPage.objects.get(url=url, sites=site_id)
-    except Http404:
+    except ObjectDoesNotExist:
         if not url.endswith('/') and settings.APPEND_SLASH:
             url += '/'
-            f = get_object_or_404(FlatPage, url=url, sites=site_id)
-            return HttpResponsePermanentRedirect('%s/' % request.path)
+            try:
+                f = FlatPage.objects.get(url=url, sites=site_id)
+            except ObjectDoesNotExist:
+                return HttpResponsePermanentRedirect('%s/' % request.path)
         else:
-            raise
-    return render_flatpage(request, f)
+            f = {}
+    result.update({
+        'success': True,
+        'data': serializer(f)
+    })
+
+    return HttpResponse(json.dumps(result), content_type="application/json")
