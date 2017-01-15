@@ -28,14 +28,14 @@ def tag(request, **kwargs):
             result.update({
                 "success": True,
                 "data": serializer(tags,
-                                   datetime_format="string")
+                                   datetime_format="timestamp")
             })
         else:
             result.update({
                 "success": True,
                 "data": serializer(
                     Tags.objects.accessible(request.user).annotate(count=Count("post")).order_by("-count", "tag"),
-                    datetime_format="string",
+                    datetime_format="timestamp",
                     foreign=True)
             })
     elif request.method == "POST":

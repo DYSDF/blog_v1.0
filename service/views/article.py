@@ -58,7 +58,7 @@ def article_time(request, **kwargs):
         y = datetime.datetime.strftime(a.create_time, "%Y")
         m = datetime.datetime.strftime(a.create_time, "%m")
         d = datetime.datetime.strftime(a.create_time, "%d")
-        time_tree.setdefault(y, {}).setdefault(m, {}).setdefault(d, []).append(serializer(a, datetime_format='string'))
+        time_tree.setdefault(y, {}).setdefault(m, {}).setdefault(d, []).append(serializer(a, datetime_format='timestamp'))
     # for yItem in time_tree:
     #     for mItem in time_tree[yItem]:
     #         time_tree[yItem][mItem] = sorted(time_tree[yItem][mItem].iteritems(), key=lambda item: item[0], reverse=True)
@@ -89,7 +89,7 @@ def article_detail(request, **kwargs):
 
     result.update({
         'success': True,
-        'data': serializer(content, datetime_format='string', foreign=True, many=True)
+        'data': serializer(content, datetime_format='timestamp', foreign=True, many=True)
     })
 
     id_list = objects.values_list("pk", flat=True)
@@ -98,11 +98,11 @@ def article_detail(request, **kwargs):
         id_index = id_list.index(int(article_id))  # 当前id的索引
         if id_index - 1 >= 0:
             result["data"].update({
-                "prev": serializer(objects.get(pk=id_list[id_index - 1]), datetime_format='string')
+                "prev": serializer(objects.get(pk=id_list[id_index - 1]), datetime_format='timestamp')
             })
         if id_index + 1 < len(id_list):
             result["data"].update({
-                "next": serializer(objects.get(pk=id_list[id_index + 1]), datetime_format='string')
+                "next": serializer(objects.get(pk=id_list[id_index + 1]), datetime_format='timestamp')
             })
 
     return HttpResponse(json.dumps(result), content_type="application/json")

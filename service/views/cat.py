@@ -28,7 +28,7 @@ def cat(request, **kwargs):
                 result.update({
                     "success": True,
                     "data": serializer(content_cat.annotate(count=Count("post")).order_by("-count", "cat"),
-                                       datetime_format="string")
+                                       datetime_format="timestamp")
                 })
             else:
                 result.update({
@@ -45,7 +45,7 @@ def cat(request, **kwargs):
 
             result.update({
                 "success": True,
-                "data": serializer(cat_list.order_by("-count", "-cat"), datetime_format="string", foreign=True)
+                "data": serializer(cat_list.order_by("-count", "-cat"), datetime_format="timestamp", foreign=True)
             })
     elif request.method == "POST":
         queries.update(request.POST)

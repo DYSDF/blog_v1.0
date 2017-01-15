@@ -28,7 +28,7 @@ def comments(request, **kwargs):
                 comment_list = content.comments.all().order_by("date")
                 result.update({
                     "success": True,
-                    "data": serializer(comment_list, datetime_format="string")
+                    "data": serializer(comment_list, datetime_format="timestamp")
                 })
             else:
                 result.update({
@@ -42,7 +42,7 @@ def comments(request, **kwargs):
         else:
             result.update({
                 "success": True,
-                "data": serializer(Comment.objects.accessible(request.user).order_by("-date")[:10], datetime_format="string", foreign=True)
+                "data": serializer(Comment.objects.accessible(request.user).order_by("-date")[:10], datetime_format="timestamp", foreign=True)
             })
 
     elif request.method == "POST":
@@ -72,7 +72,7 @@ def comments(request, **kwargs):
                 new_comment = form.save()
                 result.update({
                     "success": True,
-                    "data": serializer(new_comment, datetime_format="string")
+                    "data": serializer(new_comment, datetime_format="timestamp")
                 })
             else:
                 errors = []
