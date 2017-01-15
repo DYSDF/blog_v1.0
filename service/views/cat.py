@@ -35,13 +35,7 @@ def cat(request, **kwargs):
                     "success": False
                 })
         else:
-            cat_list = Cats.objects.accessible(request.user)\
-                .annotate(count=(Count("post") +
-                                 Count("childType__post") +
-                                 Count("childType__childType__post") +
-                                 Count("childType__childType__childType__post") +
-                                 Count("childType__childType__childType__childType__post") +
-                                 Count("childType__childType__childType__childType__childType__post")))
+            cat_list = Cats.objects.accessible(request.user).annotate(count=Count("post"))
 
             result.update({
                 "success": True,
